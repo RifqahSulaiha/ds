@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Structures - C++ Practical Programs</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #131b2e;
+      --panel2: #0e1728;
+      --text: #e8eefc;
+      --muted: #a8b4cc;
+      --accent: #00c9a7;
+      --border: #293650;
+      --code: #09111f;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    header {
+      padding: 42px 20px 30px;
+      text-align: center;
+      background: linear-gradient(135deg, #101b31, #123c42);
+      border-bottom: 1px solid var(--border);
+    }
+    header h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 4vw, 2.8rem); }
+    header p { margin: 0; color: var(--muted); }
+    .accent { color: var(--accent); }
+    .layout {
+      width: min(1200px, 94%);
+      margin: 28px auto 60px;
+      display: grid;
+      grid-template-columns: 245px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+    aside {
+      position: sticky;
+      top: 16px;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--panel);
+    }
+    aside h2 { margin: 0 0 12px; font-size: 1rem; }
+    aside a {
+      display: block;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 7px 9px;
+      margin: 3px 0;
+      border-radius: 7px;
+      font-size: .92rem;
+    }
+    aside a:hover { color: var(--text); background: #203047; }
+    main { min-width: 0; }
+    .intro {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+    .program {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--panel);
+      margin-bottom: 18px;
+      overflow: hidden;
+      scroll-margin-top: 16px;
+    }
+    .program summary {
+      cursor: pointer;
+      padding: 17px 20px;
+      font-size: 1.04rem;
+      font-weight: 700;
+      list-style-position: inside;
+      background: #172239;
+    }
+    .program summary:hover { background: #1b2b43; }
+    .program-content { padding: 18px; }
+    .description { color: var(--muted); margin-top: 0; }
+    .code-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin: 18px 0 8px;
+    }
+    .code-heading h3 { margin: 0; font-size: .98rem; }
+    button {
+      border: 1px solid #247d76;
+      color: #eafffa;
+      background: #125c56;
+      border-radius: 7px;
+      padding: 7px 11px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    button:hover { background: #167267; }
+    pre {
+      margin: 0;
+      padding: 17px;
+      overflow-x: auto;
+      border: 1px solid #1f2c42;
+      border-radius: 10px;
+      background: var(--code);
+      color: #d8e7ff;
+      font: 13.5px/1.65 Consolas, Monaco, "Courier New", monospace;
+      tab-size: 4;
+      white-space: pre;
+    }
+    .output {
+      background: #071b1a;
+      color: #b9fff0;
+      border-color: #17413d;
+    }
+    footer { text-align: center; padding: 24px; color: var(--muted); border-top: 1px solid var(--border); }
+    .search {
+      width: 100%;
+      margin: 10px 0 12px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--code);
+      color: var(--text);
+    }
+    @media (max-width: 800px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { position: static; }
+      aside nav { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+    }
+    @media (max-width: 480px) {
+      aside nav { grid-template-columns: 1fr; }
+      .program-content { padding: 12px; }
+      pre { font-size: 12px; padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><span class="accent">Data Structures</span> Practical Programs</h1>
+    <p>10 C++ programs with source code and sample output</p>
+  </header>
+
+  <div class="layout">
+    <aside>
+      <h2>Quick navigation</h2>
+      <input class="search" id="search" type="search" placeholder="Search programs..." aria-label="Search programs">
+      <nav id="nav">
+        <a href="#p1">1. List ADT</a>
+        <a href="#p2">2. Linear Search</a>
+        <a href="#p3">3. Stack ADT</a>
+        <a href="#p4">4. Binary Search</a>
+        <a href="#p5">5. Queue ADT</a>
+        <a href="#p6">6. Bubble Sort</a>
+        <a href="#p7">7. BFS</a>
+        <a href="#p8">8. Selection Sort</a>
+        <a href="#p9">9. DFS</a>
+        <a href="#p10">10. Insertion Sort</a>
+      </nav>
+    </aside>
+
+    <main>
+      <section class="intro">
+        <h2>How to use this page</h2>
+        <p>Choose a program from the menu or open a section below. Press <strong>Copy code</strong> to copy its C++ source. The examples use the older Turbo C++ style headers (<code>iostream.h</code> and <code>conio.h</code>), matching the supplied practical programs.</p>
+        <p>When hosted on HTTPS or localhost, open this page once while online to make it available offline.</p>
+      </section>
+
+      <details class="program" id="p1" open>
+        <summary>1. List ADT using Arrays and Linked Lists</summary>
+        <div class="program-content">
+          <p class="description">Displays an array and a linked list, then deletes the value 20 from each.</p>
+          <div class="code-heading"><h3>C++ Source Code</h3><button class="copy">Copy code</button></div>
+          <pre class="source"><code>#include&lt;iostream.h&gt;
+#include&lt;conio.h&gt;
+
+struct node
+{
+    int data;
+    node *next;
+};
+
+void main()
+{
+    clrscr();
+
+    int arr[10]={10,20,30}, n=3, i;
+    node *head=NULL, *p, *temp;
+
+    cout&lt;&lt;"Array List: ";
+    for(i=0;i&lt;n;i++)
+        cout&lt;&lt;arr[i]&lt;&lt;" ";
+
+    // Array deletion: delete 20
+    for(i=1;i&lt;n-1;i++)
+        arr[i]=arr[i+1];
+    n--;
+
+    cout&lt;&lt;"\\nAfter deletion: ";
+    for(i=0;i&lt;n;i++)
+        cout&lt;&lt;arr[i]&lt;&lt;" ";
+
+    // Create linked list
+    for(i=1;i&lt;=3;i++)
+    {
+        temp=new node;
+        temp-&gt;data=i*10;
+        temp-&gt;next=NULL;
+
+        if(head==NULL)
+            head=temp;
+        else
+            p-&gt;next=temp;
+
+        p=temp;
+    }
+
+    cout&lt;&lt;"\\nLinked List: ";
+    p=head;
+    while(p!=NULL)
+    {
+        cout&lt;&lt;p-&gt;data&lt;&lt;" ";
+        p=p-&gt;next;
+    }
+
+    // Linked list deletion: delete 20
+    p=head;
+    temp=p-&gt;next;
+    p-&gt;next=temp-&gt;next;
+    delete temp;
+
+    cout&lt;&lt;"\\nAfter deletion: ";
+    p=head;
+    while(p!=NULL)
+    {
+        cout&lt;&lt;p-&gt;data&lt;&lt;" ";
+        p=p-&gt;next;
+    }
+
+    getch();
+}</code></pre>
+          <div class="code-heading"><h3>Sample Output</h3><button class="copy-output">Copy output</button></div>
+          <pre class="output">Array List: 10 20 30
+After deletion: 10 30
+Linked List: 10 20 30
+After deletion: 10 30</pre>
+        </div>
+      </details>
+
+      <details class="program" id="p2">
+        <summary>2. Linear Search</summary>
+        <div class="program-content">
+          <p class="description">Checks each array element one by one until the required number is found.</p>
+          <div class="code-heading"><h3>C++ Source Code</h3><button class="copy">Copy code</button></div>
+          <pre class="source"><code>#include&lt;iostream.h&gt;
+#include&lt;conio.h&gt;
+
+void main()
+{
+    clrscr();
+    int a[10], n, i, key;
+
+    cout&lt;&lt;"Enter size: ";
+    cin&gt;&gt;n;
+
+    cout&lt;&lt;"Enter numbers: ";
+    for(i=0;i&lt;n;i++)
+        cin&gt;&gt;a[i];
+
+    cout&lt;&lt;"Enter number to search: ";
+    cin&gt;&gt;key;
+
+    for(i=0;i&lt;n;i++)
+    {
+        if(a[i]==key)
+        {
+            cout&lt;&lt;"Number found at position "&lt;&lt;i+1;
+            getch();
+            return;
+        }
+    }
+
+    cout&lt;&lt;"Number not found";
+    getch();
+}</code></pre>
+          <div class="code-heading"><h3>Sample Output</h3><button class="copy-output">Copy output</button></div>
+          <pre class="output">Enter size: 5
+Enter numbers: 10 20 30 40 50
+Enter number to search: 30
+Number found at position 3</pre>
+        </div>
+      </details>
+
+      <details class="program" id="p3">
+        <summary>3. Stack ADT using a Singly Linked List</summary>
+        <div class="program-content">
+          <p class="description">Offers Push, Pop, and Display operations. A stack follows LIFO: Last In, First Out.</p>
+          <div class="code-heading"><h3>C++ Source Code</h3><button class="copy">Copy code</button></div>
+          <pre class="source"><code>#include&lt;iostream.h&gt;
+#include&lt;conio.h&gt;
+
+struct node
+{
+    int data;
+    node *next;
+};
+
+void main()
+{
+    clrscr();
+    node *top=NULL, *p;
+    int ch, item;
+
+    do
+    {
+        cout&lt;&lt;"\\n1.Push 2.Pop 3.Display 4.Exit: ";
+        cin&gt;&gt;ch;
+
+        if(ch==1)
+        {
+            cout&lt;&lt;"Enter value: ";
+            cin&gt;&gt;item;
+            p=new node;
+            p-&gt;data=item;
+            p-&gt;next=top;
+            top=p;
+        }
+        else if(ch==2)
+        {
+            if(top==NULL)
+                cout&lt;&lt;"Stack empty";
+            else
+            {
+                cout&lt;&lt;"Deleted: "&lt;&lt;top-&gt;data;
+                p=top;
+                top=top-&gt;next;
+                delete p;
+            }
+        }
+        else if(ch==3)
+        {
+            for(p=top;p!=NULL;p=p-&gt;next)
+                cout&lt;&lt;p-&gt;data&lt;&lt;" ";
+        }
+    }while(ch!=4);
+
+    getch();
+}</code></pre>
+          <div class="code-heading"><h3>Sample Output</h3><button class="copy-output">Copy output</button></div>
+          <pre class="output">1.Push 2.Pop 3.Display 4.Exit: 1
+Enter value: 10
+
+1.Push 2.Pop 3.Display 4.Exit: 1
+Enter value: 20
+
+1.Push 2.Pop 3.Display 4.Exit: 3
+20 10
+
+1.Push 2.Pop 3.Display 4.Exit: 2
+Deleted: 20
+
+1.Push 2.Pop 3.Display 4.Exit: 4</pre>
+        </div>
+      </details>
+
+      <details class="program" id="p4">
+        <summary>4. Binary Search</summary>
+        <div class="program-content">
+          <p class="description">Searches a sorted array by repeatedly checking its middle element.</p>
+          <div class="code-heading"><h3>C++ Source Code</h3><button class="copy">Copy code</button></div>
+          <pre class="source"><code>#include&lt;iostream.h&gt;
+#include&lt;conio.h&gt;
+
+void main()
+{
+    clrscr();
+    int a[10], n, i, key;
+    int low, high, mid;
+
+    cout&lt;&lt;"Enter size: ";
+    cin&gt;&gt;n;
+
+    cout&lt;&lt;"Enter sorted numbers: ";
+    for(i=0;i&lt;n;i++)
+        cin&gt;&gt;a[i];
+
+    cout&lt;&lt;"Enter number to search: ";
+    cin&gt;&gt;key;
+
+    low=0;
+    high=n-1;
+
+    while(low&lt;=high)
+    {
+        mid=(low+high)/2;
+
+        if(a[mid]==key)
+            break;
+        else if(key&gt;a[mid])
+            low=mid+1;
+        else
+            high=mid-1;
+    }
+
+    if(low&lt;=high)
+        cout&lt;&lt;"Number found at position "&lt;&lt;mid+1;
+    else
+        cout&lt;&lt;"Number not found";
+
+    getch();
+}</code></pre>
+          <div class="code-heading"><h3>Sample Output</h3><button class="copy-output">Copy output</button></div>
+          <pre class="output">Enter size: 5
+Enter sorted numbers: 10 20 30 40 50
+Enter number to search: 40
+Number found at position 4</pre>
+        </div>
+      </details>
+
+      <details class="program" id="p5">
+        <summary>5. Queue ADT using a Singly Linked List</summary>
+        <div class="program-content">
+          <p class="description">Offers Insert, Delete, and Display operations. A queue follows FIFO: First In, First Out.</p>
+          <div class="code-heading"><h3>C++ Source Code</h3><button class="copy">Copy code</button></div>
+          <pre class="source"><code>#include&lt;iostream.h&gt;
+#include&lt;conio.h&gt;
+
+struct node
+{
+    int data;
+    node *next;
+};
+
+void main()
+{
+    clrscr();
+    node *front=NULL, *rear=NULL, *p;
+    int ch, item;
+
+    do
+    {
+        cout&lt;&lt;"\\n1.Insert 2.Delete 3.Display 4.Exit: ";
+        cin&gt;&gt;ch;
+
+        if(ch==1)
+        {
+            cout&lt;&lt;"Enter value: ";
+            cin&gt;&gt;item;
+
+            p=new node;
+            p-&gt;data=item;
+            p-&gt;next=NULL;
+
+            if(front==NULL)
+                front=rear=p;
+            else
+            {
+                rear-&gt;next=p;
+                rear=p;
+            }
+        }
+        else if(ch==2)
+        {
+            if(front==NULL)
+                cout&lt;&lt;"Queue empty";
+            else
+            {
+                cout&lt;&lt;"Deleted: "&lt;&lt;front-&gt;data;
+                p=front;
+                front=front-&gt;next;
+                delete p;
+
+                if(front==NULL)
+                    rear=NULL;
+            }
+        }
+        else if(ch==3)
+        {
+            for(p=front;p!=NULL;p=p-&gt;next)
+                cout&lt;&lt;p-&gt;data&lt;&lt;" ";
+        }
+    }while(ch!=4);
+
+    getch();
+}</code></pre>
+          <div class="code-heading"><h3>Sample Output</h3><button class="copy-output">Copy output</button></div>
+          <pre class="output">1.Insert 2.Delete 3.Display 4.Exit: 1
+Enter value: 10
+
+1.Insert 2.Delete 3.Display 4.Exit: 1
+Enter value: 20
+
+1.Insert 2.Delete 3.Display 4.Exit: 3
+10 20
+
+1.Insert 2.Delete 3.Display 4.Exit: 2
+Deleted: 10
+
+1.Insert 2.Delete 3.Display 4.Exit: 4</pre>
+        </div>
+      </details>
+
+      <details class="program" id="p6">
+        <summary>6. Bubble Sort</summary>
+        <div class="program-content">
+          <p class="description">Compares neighbouring values and swaps them when they are in the wrong order.</p>
+          <div class="code-heading"><h3>C++ Source Code</h3><button class="copy">Copy code</button></div>
+          <pre class="source"><code>#include&lt;iostream.h&gt;
+#include&lt;conio.h&gt;
+
+void main()
+{
+    clrscr();
+    int a[10], n, i, j, temp;
+
+    cout&lt;&lt;"Enter size: ";
+    cin&gt;&gt;n;
+
+    cout&lt;&lt;"Enter numbers: ";
+    for(i=0;i&lt;n;i++)
+        cin&gt;&gt;a[i];
+
+    for(i=0;i&lt;n-1;i++)
+    {
+        for(j=0;j&lt;n-i-1;j++)
+        {
+            if(a[j]&gt;a[j+1])
+            {
+                temp=a[j];
+                a[j]=a[j+1];
+                a[j+1]=temp;
+            }
+        }
+    }
+
+    cout&lt;&lt;"Sorted numbers: ";
+    for(i=0;i&lt;n;i++)
+        cout&lt;&lt;a[i]&lt;&lt;" ";
+
+    getch();
+}</code></pre>
+          <div class="code-heading"><h3>Sample Output</h3><button class="copy-output">Copy output</button></div>
+          <pre class="output">Enter size: 5
+Enter numbers: 5 2 4 1 3
+Sorted numbers: 1 2 3 4 5</pre>
+        </div>
+      </details>
+
+      <details class="program" id="p7">
+        <summary>7. Breadth-First Search (BFS)</summary>
+        <div class="program-content">
+          <p class="description">Visits graph vertices level by level, starting at vertex 0.</p>
+          <div class="code-heading"><h3>C++ Source Code</h3><button class="copy">Copy code</button></div>
+          <pre class="source"><code>#include&lt;iostream.h&gt;
+#include&lt;conio.h&gt;
+
+void main()
+{
+    clrscr();
+    int a[10][10], q[10], visited[10]={0};
+    int n, i, j, front=0, rear=0;
+
+    cout&lt;&lt;"Enter number of vertices: ";
+    cin&gt;&gt;n;
+
+    cout&lt;&lt;"Enter adjacency matrix:\\n";
+    for(i=0;i&lt;n;i++)
+        for(j=0;j&lt;n;j++)
+            cin&gt;&gt;a[i][j];
+
+    q[rear++]=0;
+    visited[0]=1;
+
+    cout&lt;&lt;"BFS: ";
+
+    while(front&lt;rear)
+    {
+        i=q[front++];
+        cout&lt;&lt;i&lt;&lt;" ";
+
+        for(j=0;j&lt;n;j++)
+        {
+            if(a[i][j]==1 && visited[j]==0)
+            {
+                q[rear++]=j;
+                visited[j]=1;
+            }
+        }
+    }
+
+    getch();
+}</code></pre>
+          <div class="code-heading"><h3>Sample Output</h3><button class="copy-output">Copy output</button></div>
+          <pre class="output">Enter number of vertices: 4
+Enter adjacency matrix:
+0 1 1 0
+1 0 0 1
+1 0 0 1
+0 1 1 0
+BFS: 0 1 2 3</pre>
+        </div>
+      </details>
+
+      <details class="program" id="p8">
+        <summary>8. Selection Sort</summary>
+        <div class="program-content">
+          <p class="description">Finds the smallest value in the unsorted part and moves it to the next position.</p>
+          <div class="code-heading"><h3>C++ Source Code</h3><button class="copy">Copy code</button></div>
+          <pre class="source"><code>#include&lt;iostream.h&gt;
+#include&lt;conio.h&gt;
+
+void main()
+{
+    clrscr();
+    int a[10], n, i, j, min, temp;
+
+    cout&lt;&lt;"Enter size: ";
+    cin&gt;&gt;n;
+
+    cout&lt;&lt;"Enter numbers: ";
+    for(i=0;i&lt;n;i++)
+        cin&gt;&gt;a[i];
+
+    for(i=0;i&lt;n-1;i++)
+    {
+        min=i;
+
+        for(j=i+1;j&lt;n;j++)
+            if(a[j]&lt;a[min])
+                min=j;
+
+        temp=a[i];
+        a[i]=a[min];
+        a[min]=temp;
+    }
+
+    cout&lt;&lt;"Sorted numbers: ";
+    for(i=0;i&lt;n;i++)
+        cout&lt;&lt;a[i]&lt;&lt;" ";
+
+    getch();
+}</code></pre>
+          <div class="code-heading"><h3>Sample Output</h3><button class="copy-output">Copy output</button></div>
+          <pre class="output">Enter size: 5
+Enter numbers: 5 2 4 1 3
+Sorted numbers: 1 2 3 4 5</pre>
+        </div>
+      </details>
+
+      <details class="program" id="p9">
+        <summary>9. Depth-First Search (DFS)</summary>
+        <div class="program-content">
+          <p class="description">Visits a vertex and explores an unvisited neighbour as deeply as possible before returning.</p>
+          <div class="code-heading"><h3>C++ Source Code</h3><button class="copy">Copy code</button></div>
+          <pre class="source"><code>#include&lt;iostream.h&gt;
+#include&lt;conio.h&gt;
+
+int a[10][10], visited[10]={0}, n;
+
+void dfs(int v)
+{
+    int i;
+    cout&lt;&lt;v&lt;&lt;" ";
+    visited[v]=1;
+
+    for(i=0;i&lt;n;i++)
+        if(a[v][i]==1 && visited[i]==0)
+            dfs(i);
+}
+
+void main()
+{
+    clrscr();
+    int i,j;
+
+    cout&lt;&lt;"Enter number of vertices: ";
+    cin&gt;&gt;n;
+
+    cout&lt;&lt;"Enter adjacency matrix:\\n";
+    for(i=0;i&lt;n;i++)
+        for(j=0;j&lt;n;j++)
+            cin&gt;&gt;a[i][j];
+
+    cout&lt;&lt;"DFS: ";
+    dfs(0);
+
+    getch();
+}</code></pre>
+          <div class="code-heading"><h3>Sample Output</h3><button class="copy-output">Copy output</button></div>
+          <pre class="output">Enter number of vertices: 4
+Enter adjacency matrix:
+0 1 1 0
+1 0 0 1
+1 0 0 1
+0 1 1 0
+DFS: 0 1 3 2</pre>
+        </div>
+      </details>
+
+      <details class="program" id="p10">
+        <summary>10. Insertion Sort</summary>
+        <div class="program-content">
+          <p class="description">Takes each value and inserts it into the correct place in the already-sorted part.</p>
+          <div class="code-heading"><h3>C++ Source Code</h3><button class="copy">Copy code</button></div>
+          <pre class="source"><code>#include&lt;iostream.h&gt;
+#include&lt;conio.h&gt;
+
+void main()
+{
+    clrscr();
+    int a[10], n, i, j, key;
+
+    cout&lt;&lt;"Enter size: ";
+    cin&gt;&gt;n;
+
+    cout&lt;&lt;"Enter numbers: ";
+    for(i=0;i&lt;n;i++)
+        cin&gt;&gt;a[i];
+
+    for(i=1;i&lt;n;i++)
+    {
+        key=a[i];
+        j=i-1;
+
+        while(j&gt;=0 && a[j]&gt;key)
+        {
+            a[j+1]=a[j];
+            j--;
+        }
+
+        a[j+1]=key;
+    }
+
+    cout&lt;&lt;"Sorted numbers: ";
+    for(i=0;i&lt;n;i++)
+        cout&lt;&lt;a[i]&lt;&lt;" ";
+
+    getch();
+}</code></pre>
+          <div class="code-heading"><h3>Sample Output</h3><button class="copy-output">Copy output</button></div>
+          <pre class="output">Enter size: 5
+Enter numbers: 5 2 4 1 3
+Sorted numbers: 1 2 3 4 5</pre>
+        </div>
+      </details>
+    </main>
+  </div>
+
+  <footer>Data Structures Practical Programs · HTML, CSS and JavaScript</footer>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./service-worker.js").catch(function(error) {
+        console.error("Could not enable offline page loading:", error);
+      });
+    }
+
+    document.querySelectorAll(".copy").forEach(function(button) {
+      button.addEventListener("click", async function() {
+        const code = button.closest(".program-content").querySelector(".source code").innerText;
+        try {
+          await navigator.clipboard.writeText(code);
+          button.textContent = "Copied!";
+          setTimeout(() => button.textContent = "Copy code", 1400);
+        } catch (error) {
+          const area = document.createElement("textarea");
+          area.value = code;
+          document.body.appendChild(area);
+          area.select();
+          document.execCommand("copy");
+          area.remove();
+          button.textContent = "Copied!";
+          setTimeout(() => button.textContent = "Copy code", 1400);
+        }
+      });
+    });
+
+    document.querySelectorAll(".copy-output").forEach(function(button) {
+      button.addEventListener("click", async function() {
+        const output = button.closest(".program-content").querySelector(".output").innerText;
+        try {
+          await navigator.clipboard.writeText(output);
+          button.textContent = "Copied!";
+          setTimeout(() => button.textContent = "Copy output", 1400);
+        } catch (error) {
+          const area = document.createElement("textarea");
+          area.value = output;
+          document.body.appendChild(area);
+          area.select();
+          document.execCommand("copy");
+          area.remove();
+          button.textContent = "Copied!";
+          setTimeout(() => button.textContent = "Copy output", 1400);
+        }
+      });
+    });
+
+    document.getElementById("search").addEventListener("input", function() {
+      const query = this.value.toLowerCase().trim();
+      document.querySelectorAll(".program").forEach(function(section) {
+        const matches = section.innerText.toLowerCase().includes(query);
+        section.style.display = matches ? "" : "none";
+        if (query && matches) section.open = true;
+      });
+    });
+  </script>
+</body>
+</html>
