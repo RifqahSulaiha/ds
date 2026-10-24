@@ -1,5 +1,6 @@
+
 const CACHE_NAME = "ds-practical-programs-v1";
-const PAGE_URL = new URL("./ds.html", self.registration.scope);
+const PAGE_URL = new URL("./ds.html", self.registration.scope).href;
 
 self.addEventListener("install", function(event) {
   event.waitUntil(
@@ -31,7 +32,11 @@ self.addEventListener("activate", function(event) {
 
 self.addEventListener("fetch", function(event) {
   const request = event.request;
-  if (request.method !== "GET" || new URL(request.url).origin !== self.location.origin) {
+
+  if (
+    request.method !== "GET" ||
+    new URL(request.url).origin !== self.location.origin
+  ) {
     return;
   }
 
@@ -39,18 +44,24 @@ self.addEventListener("fetch", function(event) {
     event.respondWith(
       fetch(request).then(function(response) {
         if (response.ok) {
-          return caches.open(CACHE_NAME).then(function(cache) {
-            return cache.put(PAGE_URL, response.clone()).then(function() {
-              return response;
-            });
+          const copy = response.clone();
+
+          caches.open(CACHE_NAME).then(function(cache) {
+            cache.put(PAGE_URL, copy);
           });
         }
+
         return response;
       }).catch(function() {
         return caches.open(CACHE_NAME).then(function(cache) {
           return cache.match(request, { ignoreSearch: true }).then(function(cachedPage) {
             return cachedPage || cache.match(PAGE_URL);
           });
+        }).then(function(cachedPage) {
+          return cachedPage || new Response(
+            "Offline: Please open the website online once before using it offline.",
+            { headers: { "Content-Type": "text/plain" } }
+          );
         });
       })
     );
