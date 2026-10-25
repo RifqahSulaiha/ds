@@ -8,15 +8,16 @@
     :root {
       --bg: #0b1020;
       --panel: #131b2e;
-      --panel2: #0e1728;
       --text: #e8eefc;
       --muted: #a8b4cc;
       --accent: #00c9a7;
       --border: #293650;
       --code: #09111f;
     }
+
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
@@ -24,15 +25,22 @@
       color: var(--text);
       line-height: 1.6;
     }
+
     header {
       padding: 42px 20px 30px;
       text-align: center;
       background: linear-gradient(135deg, #101b31, #123c42);
       border-bottom: 1px solid var(--border);
     }
-    header h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 4vw, 2.8rem); }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+    }
+
     header p { margin: 0; color: var(--muted); }
     .accent { color: var(--accent); }
+
     .layout {
       width: min(1200px, 94%);
       margin: 28px auto 60px;
@@ -41,6 +49,7 @@
       gap: 24px;
       align-items: start;
     }
+
     aside {
       position: sticky;
       top: 16px;
@@ -49,7 +58,9 @@
       border-radius: 14px;
       background: var(--panel);
     }
+
     aside h2 { margin: 0 0 12px; font-size: 1rem; }
+
     aside a {
       display: block;
       color: var(--muted);
@@ -59,23 +70,31 @@
       border-radius: 7px;
       font-size: .92rem;
     }
-    aside a:hover { color: var(--text); background: #203047; }
+
+    aside a:hover {
+      color: var(--text);
+      background: #203047;
+    }
+
     main { min-width: 0; }
-    .intro {
+
+    .intro, .program {
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: 14px;
+    }
+
+    .intro {
       padding: 20px;
       margin-bottom: 18px;
     }
+
     .program {
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      background: var(--panel);
       margin-bottom: 18px;
       overflow: hidden;
       scroll-margin-top: 16px;
     }
+
     .program summary {
       cursor: pointer;
       padding: 17px 20px;
@@ -84,9 +103,11 @@
       list-style-position: inside;
       background: #172239;
     }
+
     .program summary:hover { background: #1b2b43; }
     .program-content { padding: 18px; }
     .description { color: var(--muted); margin-top: 0; }
+
     .code-heading {
       display: flex;
       justify-content: space-between;
@@ -95,25 +116,37 @@
       margin: 18px 0 8px;
       flex-wrap: wrap;
     }
+
     .code-heading h3 { margin: 0; font-size: .98rem; }
-    .code-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+    .code-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
     button {
       border: 1px solid #247d76;
       color: #eafffa;
       background: #125c56;
       border-radius: 7px;
-      padding: 7px 11px;
+      padding: 8px 11px;
       cursor: pointer;
       font-weight: 700;
     }
+
     button:hover { background: #167267; }
+    button:disabled { opacity: .65; cursor: wait; }
+
     .download {
       background: #173b67;
       border-color: #3266a0;
       color: #e8f2ff;
     }
+
     .download:hover { background: #24558b; }
-    button:disabled { opacity: .7; cursor: wait; }
+
     pre {
       margin: 0;
       padding: 17px;
@@ -126,12 +159,20 @@
       tab-size: 4;
       white-space: pre;
     }
+
     .output {
       background: #071b1a;
       color: #b9fff0;
       border-color: #17413d;
     }
-    footer { text-align: center; padding: 24px; color: var(--muted); border-top: 1px solid var(--border); }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
     .search {
       width: 100%;
       margin: 10px 0 12px;
@@ -141,20 +182,128 @@
       background: var(--code);
       color: var(--text);
     }
+
+    /* Folder-access dialog */
+
+    .access-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(3, 8, 18, .88);
+      backdrop-filter: blur(7px);
+    }
+
+    .access-overlay[hidden] { display: none; }
+
+    .access-dialog {
+      width: min(520px, 100%);
+      padding: 26px;
+      border: 1px solid #247d76;
+      border-radius: 16px;
+      background: #131b2e;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, .45);
+    }
+
+    .access-dialog h2 {
+      margin: 0 0 8px;
+      font-size: 1.4rem;
+    }
+
+    .access-dialog p { color: var(--muted); }
+
+    .target-path {
+      display: block;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--code);
+      color: var(--accent);
+      overflow-wrap: anywhere;
+      font-family: Consolas, Monaco, monospace;
+    }
+
+    .access-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .access-actions button { min-height: 42px; }
+
+    .secondary {
+      background: #202c42;
+      border-color: #42516b;
+    }
+
+    .access-status {
+      min-height: 1.5em;
+      margin: 14px 0 0 !important;
+      font-weight: 700;
+    }
+
+    .access-status.success { color: #7cf3ce; }
+    .access-status.error { color: #ffaaa8; }
+    .access-status.info { color: #b7d7ff; }
+
     @media (max-width: 800px) {
       .layout { grid-template-columns: 1fr; }
       aside { position: static; }
-      aside nav { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+      aside nav {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2px;
+      }
     }
+
     @media (max-width: 480px) {
       aside nav { grid-template-columns: 1fr; }
       .program-content { padding: 12px; }
       pre { font-size: 12px; padding: 12px; }
       .code-heading { align-items: flex-start; }
+      .access-dialog { padding: 20px; }
+      .access-actions { flex-direction: column; }
+      .access-actions button { width: 100%; }
     }
   </style>
 </head>
 <body>
+
+  <!-- This dialog appears automatically. The browser picker opens only after a click. -->
+  <div class="access-overlay" id="accessOverlay"
+       role="dialog" aria-modal="true" aria-labelledby="accessTitle">
+    <div class="access-dialog">
+      <h2 id="accessTitle"><span class="accent">Allow folder access</span></h2>
+
+      <p>
+        Folder permission allows this website to save your C++ practical
+        programs directly into your Turbo C++ folder. Click the button below
+        and select <strong>C:\TURBOC3\BIN</strong> in the browser's folder picker.
+        A <strong>Data Structure</strong> subfolder will be created if necessary.
+      </p>
+
+      <span class="target-path">C:\TURBOC3\BIN\Data Structure</span>
+
+      <div class="access-actions">
+        <button type="button" id="allowFolderAccess">
+          Allow Folder Access
+        </button>
+
+        <button type="button" id="continueWithoutAccess" class="secondary">
+          Continue Without Folder Access
+        </button>
+      </div>
+
+      <p id="accessStatus" class="access-status info"
+         role="status" aria-live="polite">
+        Select Allow Folder Access to choose your BIN folder.
+      </p>
+    </div>
+  </div>
 
   <header>
     <h1><span class="accent">Data Structures</span> Practical Programs</h1>
@@ -164,7 +313,10 @@
   <div class="layout">
     <aside>
       <h2>Quick navigation</h2>
-      <input class="search" id="search" type="search" placeholder="Search programs..." aria-label="Search programs">
+
+      <input class="search" id="search" type="search"
+             placeholder="Search programs..." aria-label="Search programs">
+
       <nav id="nav">
         <a href="#p1">1. List ADT</a>
         <a href="#p2">2. Linear Search</a>
@@ -182,15 +334,37 @@
     <main>
       <section class="intro">
         <h2>How to use this page</h2>
-        <p>Choose a program from the menu or open a section below. Press <strong>Copy code</strong> to copy its C++ source, or <strong>Download .CPP</strong> to save it as a Turbo C++ source file.</p>
-        <p>For direct saving, use Chrome or Edge over HTTPS/localhost. The first time, select your <code>C:\TURBOC3\BIN</code> folder when prompted. The page will create a <code>Data Structure</code> folder inside it if needed.</p>
+        <p>
+          Open a program using the menu. Each program has separate
+          <strong>Copy Code</strong>, <strong>Copy Output</strong>, and
+          <strong>Download .CPP</strong> buttons.
+        </p>
+        <p>
+          For direct saving, use Chrome or Edge over HTTPS or localhost.
+          When asked, select <code>C:\TURBOC3\BIN</code>. The website will
+          create <code>Data Structure</code> inside the selected folder.
+          If you continue without folder access, you can grant it later
+          when downloading a program.
+        </p>
       </section>
+
+      <!-- 1. LIST ADT -->
 
       <details class="program" id="p1" open>
         <summary>1. List ADT using Arrays and Linked Lists</summary>
         <div class="program-content">
-          <p class="description">Displays an array and a linked list, then deletes the value 20 from each.</p>
-          <div class="code-heading"><h3>C++ Source Code</h3><div class="code-actions"><button class="copy">Copy code</button><button class="download">Download .CPP</button></div></div>
+          <p class="description">
+            Displays an array and a linked list, then deletes the value 20 from each.
+          </p>
+
+          <div class="code-heading">
+            <h3>C++ Source Code</h3>
+            <div class="code-actions">
+              <button class="copy">Copy Code</button>
+              <button class="download">Download .CPP</button>
+            </div>
+          </div>
+
           <pre class="source"><code>#include&lt;iostream.h&gt;
 #include&lt;conio.h&gt;
 
@@ -259,7 +433,12 @@ void main()
 
     getch();
 }</code></pre>
-          <div class="code-heading"><h3>Sample Output</h3><button class="copy-output">Copy output</button></div>
+
+          <div class="code-heading">
+            <h3>Sample Output</h3>
+            <button class="copy-output">Copy Output</button>
+          </div>
+
           <pre class="output">Array List: 10 20 30
 After deletion: 10 30
 Linked List: 10 20 30
@@ -267,11 +446,23 @@ After deletion: 10 30</pre>
         </div>
       </details>
 
+      <!-- 2. LINEAR SEARCH -->
+
       <details class="program" id="p2">
         <summary>2. Linear Search</summary>
         <div class="program-content">
-          <p class="description">Checks each array element one by one until the required number is found.</p>
-          <div class="code-heading"><h3>C++ Source Code</h3><div class="code-actions"><button class="copy">Copy code</button><button class="download">Download .CPP</button></div></div>
+          <p class="description">
+            Checks each array element one by one until the required number is found.
+          </p>
+
+          <div class="code-heading">
+            <h3>C++ Source Code</h3>
+            <div class="code-actions">
+              <button class="copy">Copy Code</button>
+              <button class="download">Download .CPP</button>
+            </div>
+          </div>
+
           <pre class="source"><code>#include&lt;iostream.h&gt;
 #include&lt;conio.h&gt;
 
@@ -303,7 +494,12 @@ void main()
     cout&lt;&lt;"Number not found";
     getch();
 }</code></pre>
-          <div class="code-heading"><h3>Sample Output</h3><button class="copy-output">Copy output</button></div>
+
+          <div class="code-heading">
+            <h3>Sample Output</h3>
+            <button class="copy-output">Copy Output</button>
+          </div>
+
           <pre class="output">Enter size: 5
 Enter numbers: 10 20 30 40 50
 Enter number to search: 30
@@ -311,11 +507,24 @@ Number found at position 3</pre>
         </div>
       </details>
 
+      <!-- 3. STACK ADT -->
+
       <details class="program" id="p3">
         <summary>3. Stack ADT using a Singly Linked List</summary>
         <div class="program-content">
-          <p class="description">Offers Push, Pop, and Display operations. A stack follows LIFO: Last In, First Out.</p>
-          <div class="code-heading"><h3>C++ Source Code</h3><div class="code-actions"><button class="copy">Copy code</button><button class="download">Download .CPP</button></div></div>
+          <p class="description">
+            Offers Push, Pop, and Display operations. A stack follows
+            LIFO: Last In, First Out.
+          </p>
+
+          <div class="code-heading">
+            <h3>C++ Source Code</h3>
+            <div class="code-actions">
+              <button class="copy">Copy Code</button>
+              <button class="download">Download .CPP</button>
+            </div>
+          </div>
+
           <pre class="source"><code>#include&lt;iostream.h&gt;
 #include&lt;conio.h&gt;
 
@@ -366,7 +575,12 @@ void main()
 
     getch();
 }</code></pre>
-          <div class="code-heading"><h3>Sample Output</h3><button class="copy-output">Copy output</button></div>
+
+          <div class="code-heading">
+            <h3>Sample Output</h3>
+            <button class="copy-output">Copy Output</button>
+          </div>
+
           <pre class="output">1.Push 2.Pop 3.Display 4.Exit: 1
 Enter value: 10
 
@@ -383,11 +597,23 @@ Deleted: 20
         </div>
       </details>
 
+      <!-- 4. BINARY SEARCH -->
+
       <details class="program" id="p4">
         <summary>4. Binary Search</summary>
         <div class="program-content">
-          <p class="description">Searches a sorted array by repeatedly checking its middle element.</p>
-          <div class="code-heading"><h3>C++ Source Code</h3><div class="code-actions"><button class="copy">Copy code</button><button class="download">Download .CPP</button></div></div>
+          <p class="description">
+            Searches a sorted array by repeatedly checking its middle element.
+          </p>
+
+          <div class="code-heading">
+            <h3>C++ Source Code</h3>
+            <div class="code-actions">
+              <button class="copy">Copy Code</button>
+              <button class="download">Download .CPP</button>
+            </div>
+          </div>
+
           <pre class="source"><code>#include&lt;iostream.h&gt;
 #include&lt;conio.h&gt;
 
@@ -429,7 +655,12 @@ void main()
 
     getch();
 }</code></pre>
-          <div class="code-heading"><h3>Sample Output</h3><button class="copy-output">Copy output</button></div>
+
+          <div class="code-heading">
+            <h3>Sample Output</h3>
+            <button class="copy-output">Copy Output</button>
+          </div>
+
           <pre class="output">Enter size: 5
 Enter sorted numbers: 10 20 30 40 50
 Enter number to search: 40
@@ -437,11 +668,24 @@ Number found at position 4</pre>
         </div>
       </details>
 
+      <!-- 5. QUEUE ADT -->
+
       <details class="program" id="p5">
         <summary>5. Queue ADT using a Singly Linked List</summary>
         <div class="program-content">
-          <p class="description">Offers Insert, Delete, and Display operations. A queue follows FIFO: First In, First Out.</p>
-          <div class="code-heading"><h3>C++ Source Code</h3><div class="code-actions"><button class="copy">Copy code</button><button class="download">Download .CPP</button></div></div>
+          <p class="description">
+            Offers Insert, Delete, and Display operations. A queue follows
+            FIFO: First In, First Out.
+          </p>
+
+          <div class="code-heading">
+            <h3>C++ Source Code</h3>
+            <div class="code-actions">
+              <button class="copy">Copy Code</button>
+              <button class="download">Download .CPP</button>
+            </div>
+          </div>
+
           <pre class="source"><code>#include&lt;iostream.h&gt;
 #include&lt;conio.h&gt;
 
@@ -503,7 +747,12 @@ void main()
 
     getch();
 }</code></pre>
-          <div class="code-heading"><h3>Sample Output</h3><button class="copy-output">Copy output</button></div>
+
+          <div class="code-heading">
+            <h3>Sample Output</h3>
+            <button class="copy-output">Copy Output</button>
+          </div>
+
           <pre class="output">1.Insert 2.Delete 3.Display 4.Exit: 1
 Enter value: 10
 
@@ -520,11 +769,23 @@ Deleted: 10
         </div>
       </details>
 
+      <!-- 6. BUBBLE SORT -->
+
       <details class="program" id="p6">
         <summary>6. Bubble Sort</summary>
         <div class="program-content">
-          <p class="description">Compares neighbouring values and swaps them when they are in the wrong order.</p>
-          <div class="code-heading"><h3>C++ Source Code</h3><div class="code-actions"><button class="copy">Copy code</button><button class="download">Download .CPP</button></div></div>
+          <p class="description">
+            Compares neighbouring values and swaps them when they are in the wrong order.
+          </p>
+
+          <div class="code-heading">
+            <h3>C++ Source Code</h3>
+            <div class="code-actions">
+              <button class="copy">Copy Code</button>
+              <button class="download">Download .CPP</button>
+            </div>
+          </div>
+
           <pre class="source"><code>#include&lt;iostream.h&gt;
 #include&lt;conio.h&gt;
 
@@ -559,18 +820,35 @@ void main()
 
     getch();
 }</code></pre>
-          <div class="code-heading"><h3>Sample Output</h3><button class="copy-output">Copy output</button></div>
+
+          <div class="code-heading">
+            <h3>Sample Output</h3>
+            <button class="copy-output">Copy Output</button>
+          </div>
+
           <pre class="output">Enter size: 5
 Enter numbers: 5 2 4 1 3
 Sorted numbers: 1 2 3 4 5</pre>
         </div>
       </details>
 
+      <!-- 7. BREADTH-FIRST SEARCH -->
+
       <details class="program" id="p7">
         <summary>7. Breadth-First Search (BFS)</summary>
         <div class="program-content">
-          <p class="description">Visits graph vertices level by level, starting at vertex 0.</p>
-          <div class="code-heading"><h3>C++ Source Code</h3><div class="code-actions"><button class="copy">Copy code</button><button class="download">Download .CPP</button></div></div>
+          <p class="description">
+            Visits graph vertices level by level, starting at vertex 0.
+          </p>
+
+          <div class="code-heading">
+            <h3>C++ Source Code</h3>
+            <div class="code-actions">
+              <button class="copy">Copy Code</button>
+              <button class="download">Download .CPP</button>
+            </div>
+          </div>
+
           <pre class="source"><code>#include&lt;iostream.h&gt;
 #include&lt;conio.h&gt;
 
@@ -610,7 +888,12 @@ void main()
 
     getch();
 }</code></pre>
-          <div class="code-heading"><h3>Sample Output</h3><button class="copy-output">Copy output</button></div>
+
+          <div class="code-heading">
+            <h3>Sample Output</h3>
+            <button class="copy-output">Copy Output</button>
+          </div>
+
           <pre class="output">Enter number of vertices: 4
 Enter adjacency matrix:
 0 1 1 0
@@ -621,11 +904,23 @@ BFS: 0 1 2 3</pre>
         </div>
       </details>
 
+      <!-- 8. SELECTION SORT -->
+
       <details class="program" id="p8">
         <summary>8. Selection Sort</summary>
         <div class="program-content">
-          <p class="description">Finds the smallest value in the unsorted part and moves it to the next position.</p>
-          <div class="code-heading"><h3>C++ Source Code</h3><div class="code-actions"><button class="copy">Copy code</button><button class="download">Download .CPP</button></div></div>
+          <p class="description">
+            Finds the smallest value in the unsorted part and moves it to the next position.
+          </p>
+
+          <div class="code-heading">
+            <h3>C++ Source Code</h3>
+            <div class="code-actions">
+              <button class="copy">Copy Code</button>
+              <button class="download">Download .CPP</button>
+            </div>
+          </div>
+
           <pre class="source"><code>#include&lt;iostream.h&gt;
 #include&lt;conio.h&gt;
 
@@ -660,18 +955,35 @@ void main()
 
     getch();
 }</code></pre>
-          <div class="code-heading"><h3>Sample Output</h3><button class="copy-output">Copy output</button></div>
+
+          <div class="code-heading">
+            <h3>Sample Output</h3>
+            <button class="copy-output">Copy Output</button>
+          </div>
+
           <pre class="output">Enter size: 5
 Enter numbers: 5 2 4 1 3
 Sorted numbers: 1 2 3 4 5</pre>
         </div>
       </details>
 
+      <!-- 9. DEPTH-FIRST SEARCH -->
+
       <details class="program" id="p9">
         <summary>9. Depth-First Search (DFS)</summary>
         <div class="program-content">
-          <p class="description">Visits a vertex and explores an unvisited neighbour as deeply as possible before returning.</p>
-          <div class="code-heading"><h3>C++ Source Code</h3><div class="code-actions"><button class="copy">Copy code</button><button class="download">Download .CPP</button></div></div>
+          <p class="description">
+            Visits a vertex and explores an unvisited neighbour as deeply as possible before returning.
+          </p>
+
+          <div class="code-heading">
+            <h3>C++ Source Code</h3>
+            <div class="code-actions">
+              <button class="copy">Copy Code</button>
+              <button class="download">Download .CPP</button>
+            </div>
+          </div>
+
           <pre class="source"><code>#include&lt;iostream.h&gt;
 #include&lt;conio.h&gt;
 
@@ -706,7 +1018,12 @@ void main()
 
     getch();
 }</code></pre>
-          <div class="code-heading"><h3>Sample Output</h3><button class="copy-output">Copy output</button></div>
+
+          <div class="code-heading">
+            <h3>Sample Output</h3>
+            <button class="copy-output">Copy Output</button>
+          </div>
+
           <pre class="output">Enter number of vertices: 4
 Enter adjacency matrix:
 0 1 1 0
@@ -717,11 +1034,23 @@ DFS: 0 1 3 2</pre>
         </div>
       </details>
 
+      <!-- 10. INSERTION SORT -->
+
       <details class="program" id="p10">
         <summary>10. Insertion Sort</summary>
         <div class="program-content">
-          <p class="description">Takes each value and inserts it into the correct place in the already-sorted part.</p>
-          <div class="code-heading"><h3>C++ Source Code</h3><div class="code-actions"><button class="copy">Copy code</button><button class="download">Download .CPP</button></div></div>
+          <p class="description">
+            Takes each value and inserts it into the correct place in the already-sorted part.
+          </p>
+
+          <div class="code-heading">
+            <h3>C++ Source Code</h3>
+            <div class="code-actions">
+              <button class="copy">Copy Code</button>
+              <button class="download">Download .CPP</button>
+            </div>
+          </div>
+
           <pre class="source"><code>#include&lt;iostream.h&gt;
 #include&lt;conio.h&gt;
 
@@ -757,7 +1086,12 @@ void main()
 
     getch();
 }</code></pre>
-          <div class="code-heading"><h3>Sample Output</h3><button class="copy-output">Copy output</button></div>
+
+          <div class="code-heading">
+            <h3>Sample Output</h3>
+            <button class="copy-output">Copy Output</button>
+          </div>
+
           <pre class="output">Enter size: 5
 Enter numbers: 5 2 4 1 3
 Sorted numbers: 1 2 3 4 5</pre>
@@ -769,144 +1103,357 @@ Sorted numbers: 1 2 3 4 5</pre>
   <footer>Data Structures Practical Programs · HTML, CSS and JavaScript</footer>
 
   <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./service-worker.js").catch(function(error) {
-        console.error("Could not enable offline page loading:", error);
+    /*
+      Optional service-worker registration.
+      For offline support, service-worker.js must exist beside this HTML file.
+    */
+    if (
+      "serviceWorker" in navigator &&
+      (
+        location.protocol === "https:" ||
+        location.hostname === "localhost" ||
+        location.hostname === "127.0.0.1"
+      )
+    ) {
+      navigator.serviceWorker.register("./service-worker.js").catch(function (error) {
+        console.warn("Offline support is unavailable:", error);
       });
     }
 
+    // Exact filenames: no spaces, underscores, or hyphens.
+    const programFileNames = {
+      p1: "ListADT.CPP",
+      p2: "LinearSearch.CPP",
+      p3: "StackADT.CPP",
+      p4: "BinarySearch.CPP",
+      p5: "QueueADT.CPP",
+      p6: "BubbleSort.CPP",
+      p7: "BFS.CPP",
+      p8: "SelectionSort.CPP",
+      p9: "DFS.CPP",
+      p10: "InsertionSort.CPP"
+    };
+
+    const accessOverlay = document.getElementById("accessOverlay");
+    const allowFolderAccessButton = document.getElementById("allowFolderAccess");
+    const continueWithoutAccessButton = document.getElementById("continueWithoutAccess");
+    const accessStatus = document.getElementById("accessStatus");
+
+    // Kept in memory for this page session only.
+    let turboBinDirectory = null;
+
+    function setAccessStatus(message, type) {
+      accessStatus.textContent = message;
+      accessStatus.className = "access-status " + (type || "info");
+    }
+
+    function openAccessDialog(message, type) {
+      accessOverlay.hidden = false;
+
+      if (message) {
+        setAccessStatus(message, type || "info");
+      }
+    }
+
+    function closeAccessDialog() {
+      accessOverlay.hidden = true;
+    }
+
+    async function requestFolderAccess() {
+      if (!window.showDirectoryPicker) {
+        setAccessStatus(
+          "Direct folder saving is not supported in this browser or page context. Use the browser download instead, then move the file manually.",
+          "error"
+        );
+        return false;
+      }
+
+      allowFolderAccessButton.disabled = true;
+      continueWithoutAccessButton.disabled = true;
+
+      setAccessStatus(
+        "Choose C:\\TURBOC3\\BIN in the folder picker. The Data Structure subfolder will be created inside it.",
+        "info"
+      );
+
+      try {
+        /*
+          The browser requires a user gesture.
+          This function is called from the Allow Folder Access button.
+        */
+        const selectedDirectory = await window.showDirectoryPicker({
+          mode: "readwrite"
+        });
+
+        // Create or verify the destination folder.
+        await selectedDirectory.getDirectoryHandle("Data Structure", {
+          create: true
+        });
+
+        turboBinDirectory = selectedDirectory;
+
+        setAccessStatus(
+          "Folder access granted. Files will be saved in C:\\TURBOC3\\BIN\\Data Structure if you selected C:\\TURBOC3\\BIN.",
+          "success"
+        );
+
+        closeAccessDialog();
+        return true;
+
+      } catch (error) {
+        if (error && error.name === "AbortError") {
+          setAccessStatus(
+            "Folder selection was cancelled. You can try again or continue without folder access.",
+            "info"
+          );
+        } else {
+          console.error("Folder access failed:", error);
+
+          setAccessStatus(
+            "Could not access or create the Data Structure folder. Check the selected folder and permissions, then try again.",
+            "error"
+          );
+        }
+
+        return false;
+
+      } finally {
+        allowFolderAccessButton.disabled = false;
+        continueWithoutAccessButton.disabled = false;
+      }
+    }
+
+    allowFolderAccessButton.addEventListener("click", requestFolderAccess);
+
+    continueWithoutAccessButton.addEventListener("click", function () {
+      closeAccessDialog();
+    });
+
+    // The dialog is visible when the page loads; no automatic picker is forced.
+    document.addEventListener("DOMContentLoaded", function () {
+      openAccessDialog();
+    });
+
+    // Copy text, with a fallback for contexts without the Clipboard API.
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+
+      const area = document.createElement("textarea");
+      area.value = text;
+      area.setAttribute("readonly", "");
+      area.style.position = "fixed";
+      area.style.left = "-9999px";
+
+      document.body.appendChild(area);
+      area.select();
+
+      const successful = document.execCommand("copy");
+      area.remove();
+
+      if (!successful) {
+        throw new Error("Clipboard copy was not successful");
+      }
+    }
+
     // Copy source code.
-    document.querySelectorAll(".copy").forEach(function(button) {
-      button.addEventListener("click", async function() {
-        const code = button.closest(".program-content").querySelector(".source code").innerText;
+    document.querySelectorAll(".copy").forEach(function (button) {
+      button.addEventListener("click", async function () {
+        const source = button
+          .closest(".program-content")
+          .querySelector("pre.source code");
+
+        const code = source.textContent;
+
         try {
-          await navigator.clipboard.writeText(code);
+          await copyText(code);
           button.textContent = "Copied!";
-          setTimeout(() => button.textContent = "Copy code", 1400);
+
+          setTimeout(function () {
+            button.textContent = "Copy Code";
+          }, 1400);
+
         } catch (error) {
-          const area = document.createElement("textarea");
-          area.value = code;
-          document.body.appendChild(area);
-          area.select();
-          document.execCommand("copy");
-          area.remove();
-          button.textContent = "Copied!";
-          setTimeout(() => button.textContent = "Copy code", 1400);
+          console.error("Copy failed:", error);
+          alert("Could not copy the code. Please select and copy it manually.");
         }
       });
     });
 
     // Copy sample output.
-    document.querySelectorAll(".copy-output").forEach(function(button) {
-      button.addEventListener("click", async function() {
-        const output = button.closest(".program-content").querySelector(".output").innerText;
+    document.querySelectorAll(".copy-output").forEach(function (button) {
+      button.addEventListener("click", async function () {
+        const output = button
+          .closest(".program-content")
+          .querySelector("pre.output").textContent;
+
         try {
-          await navigator.clipboard.writeText(output);
+          await copyText(output);
           button.textContent = "Copied!";
-          setTimeout(() => button.textContent = "Copy output", 1400);
+
+          setTimeout(function () {
+            button.textContent = "Copy Output";
+          }, 1400);
+
         } catch (error) {
-          const area = document.createElement("textarea");
-          area.value = output;
-          document.body.appendChild(area);
-          area.select();
-          document.execCommand("copy");
-          area.remove();
-          button.textContent = "Copied!";
-          setTimeout(() => button.textContent = "Copy output", 1400);
+          console.error("Copy output failed:", error);
+          alert("Could not copy the output. Please select and copy it manually.");
         }
       });
     });
 
-    // Each program gets its own Turbo C++ source filename.
-    const programFileNames = {
-      p1: "List_ADT.CPP",
-      p2: "Linear_Search.CPP",
-      p3: "Stack_ADT.CPP",
-      p4: "Binary_Search.CPP",
-      p5: "Queue_ADT.CPP",
-      p6: "Bubble_Sort.CPP",
-      p7: "BFS.CPP",
-      p8: "Selection_Sort.CPP",
-      p9: "DFS.CPP",
-      p10: "Insertion_Sort.CPP"
-    };
+    // Browser-download fallback.
+    function browserDownload(code, fileName) {
+      const blob = new Blob([code], {
+        type: "text/plain;charset=utf-8"
+      });
 
-    // Browser folder access is permission-based and requires a supported browser.
-    let turboBinDirectory = null;
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
 
-    document.querySelectorAll(".download").forEach(function(button) {
-      button.addEventListener("click", async function() {
+      link.href = url;
+      link.download = fileName;
+
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      // Give the browser time to begin the download.
+      setTimeout(function () {
+        URL.revokeObjectURL(url);
+      }, 1500);
+    }
+
+    // Save source code to the selected Data Structure folder.
+    document.querySelectorAll(".download").forEach(function (button) {
+      button.addEventListener("click", async function () {
         const section = button.closest(".program");
-        const code = section.querySelector(".source code").innerText;
+        const sourceElement = section.querySelector("pre.source code");
+        const code = sourceElement.textContent;
         const fileName = programFileNames[section.id];
+        const originalText = "Download .CPP";
 
-        if (!window.showDirectoryPicker) {
-          // Fallback: normal browser download, which uses the browser's Downloads location.
-          const blob = new Blob([code], { type: "text/plain;charset=utf-8" });
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement("a");
-          link.href = url;
-          link.download = fileName;
-          document.body.appendChild(link);
-          link.click();
-          link.remove();
-          URL.revokeObjectURL(url);
-          alert(
-            "Your browser does not support choosing a folder directly. " +
-            "The CPP file was sent to your normal download location. " +
-            "Move it to C:\\TURBOC3\\BIN\\Data Structure manually."
-          );
+        if (!fileName || !code) {
+          alert("The source code or filename for this program could not be found.");
           return;
         }
 
-        const originalText = button.textContent;
+        // Prevent repeated clicks while saving.
+        if (button.disabled) return;
+
         button.disabled = true;
 
         try {
+          // Unsupported browsers use a regular browser download.
+          if (!window.showDirectoryPicker) {
+            browserDownload(code, fileName);
+
+            alert(
+              "Direct folder access is not supported in this browser or page context. " +
+              fileName +
+              " was sent to your normal Downloads location. " +
+              "Move it manually to C:\\TURBOC3\\BIN\\Data Structure."
+            );
+
+            return;
+          }
+
+          // If access was skipped, reopen the dialog before saving.
           if (!turboBinDirectory) {
-            button.textContent = "Select BIN folder...";
-            // Select C:\\TURBOC3\\BIN, not the Data Structure folder.
-            turboBinDirectory = await window.showDirectoryPicker({ mode: "readwrite" });
+            openAccessDialog(
+              "Folder access is required to save " + fileName +
+              ". Click Allow Folder Access and select C:\\TURBOC3\\BIN.",
+              "info"
+            );
+
+            return;
           }
 
           button.textContent = "Saving...";
+
           const dataFolder = await turboBinDirectory.getDirectoryHandle(
             "Data Structure",
             { create: true }
           );
-          const fileHandle = await dataFolder.getFileHandle(fileName, { create: true });
-          const writable = await fileHandle.createWritable();
-          await writable.write(code);
-          await writable.close();
 
-          button.textContent = "Downloaded!";
-          setTimeout(function() {
-            button.textContent = originalText;
-            button.disabled = false;
-          }, 1500);
-        } catch (error) {
-          if (error.name === "AbortError") {
-            button.textContent = originalText;
-          } else {
-            console.error("Could not save C++ file:", error);
-            alert(
-              "Could not save the program. Please select C:\\TURBOC3\\BIN " +
-              "and allow folder access when prompted."
-            );
-            button.textContent = originalText;
+          const fileHandle = await dataFolder.getFileHandle(
+            fileName,
+            { create: true }
+          );
+
+          const writable = await fileHandle.createWritable();
+
+          try {
+            await writable.write(code);
+            await writable.close();
+          } catch (writeError) {
+            try {
+              await writable.abort();
+            } catch (abortError) {
+              console.warn("Could not abort the failed write:", abortError);
+            }
+
+            throw writeError;
           }
+
+          // Success is displayed only after write() and close() succeed.
+          button.textContent = "Saved!";
+
+          setAccessStatus(
+            fileName + " saved successfully to the selected Data Structure folder.",
+            "success"
+          );
+
+          setTimeout(function () {
+            button.textContent = originalText;
+          }, 1500);
+
+        } catch (error) {
+          console.error("Could not save C++ file:", error);
+
+          if (error && error.name === "AbortError") {
+            openAccessDialog(
+              "The folder selection or save was cancelled. Try again when ready.",
+              "info"
+            );
+          } else {
+            openAccessDialog(
+              "Could not save " + fileName +
+              ". Please grant folder access again and check the folder permissions.",
+              "error"
+            );
+          }
+
+          button.textContent = originalText;
+
+        } finally {
           button.disabled = false;
         }
       });
     });
 
-    // Search programs by title or content.
-    document.getElementById("search").addEventListener("input", function() {
+    // Search program titles, descriptions, source code and sample outputs.
+    document.getElementById("search").addEventListener("input", function () {
       const query = this.value.toLowerCase().trim();
-      document.querySelectorAll(".program").forEach(function(section) {
+
+      document.querySelectorAll(".program").forEach(function (section) {
         const matches = section.innerText.toLowerCase().includes(query);
+
         section.style.display = matches ? "" : "none";
-        if (query && matches) section.open = true;
+
+        if (query && matches) {
+          section.open = true;
+        }
+      });
+
+      // Keep quick navigation in sync with the filtered program list.
+      document.querySelectorAll("#nav a").forEach(function (link) {
+        const target = document.querySelector(link.getAttribute("href"));
+
+        link.style.display =
+          !query || (target && target.style.display !== "none") ? "" : "none";
       });
     });
   </script>
