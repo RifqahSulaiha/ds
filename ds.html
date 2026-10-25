@@ -176,6 +176,23 @@
 
     .download:hover { background: #24558b; }
 
+    /* Always show the exact CPP filename beside its download button. */
+    .filename-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      max-width: 100%;
+      padding: 7px 10px;
+      border: 1px solid rgba(0, 201, 167, .35);
+      border-radius: 7px;
+      background: rgba(0, 201, 167, .08);
+      color: #8ff5df;
+      font: 700 .84rem/1.3 Consolas, Monaco, "Courier New", monospace;
+      overflow-wrap: anywhere;
+    }
+
+    .filename-label::before { content: "📄"; }
+
     pre {
       margin: 0;
       padding: 17px;
@@ -1434,6 +1451,17 @@ Sorted numbers: 1 2 3 4 5</pre>
       p9: "DFS.CPP",
       p10: "InsertionSort.CPP"
     };
+
+    // Show every program's exact filename beside its Download button at all times.
+    document.querySelectorAll(".program .download").forEach(function(button) {
+      const section = button.closest(".program");
+      const fileName = programFileNames[section.id];
+      const label = document.createElement("span");
+      label.className = "filename-label";
+      label.textContent = fileName;
+      label.setAttribute("aria-label", "Download filename: " + fileName);
+      button.parentNode.insertBefore(label, button);
+    });
 
     // Show download filenames and statuses directly on the webpage.
     const downloadHistoryList = document.getElementById("downloadHistoryList");
