@@ -343,6 +343,61 @@
       display: none;
     }
 
+
+
+    /* Visible download history */
+    .download-history {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .download-history h2 {
+      margin: 0 0 5px;
+      font-size: 1.05rem;
+    }
+
+    .download-history-note {
+      color: var(--muted);
+      font-size: .88rem;
+      margin: 0 0 12px;
+    }
+
+    .download-history-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .download-history-empty {
+      color: var(--muted);
+      font-size: .92rem;
+      padding: 12px;
+      border: 1px dashed var(--border);
+      border-radius: 9px;
+    }
+
+    .download-history-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 12px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: var(--panel2);
+      min-width: 0;
+    }
+
+    .download-history-icon { font-size: 1.25rem; }
+    .download-history-file { font-weight: 700; overflow-wrap: anywhere; }
+    .download-history-status { color: var(--muted); font-size: .84rem; overflow-wrap: anywhere; }
+    .download-history-item.success .download-history-status { color: #8ff5df; }
+    .download-history-item.pending .download-history-status { color: #ffd58a; }
+    .download-history-item.error .download-history-status { color: #ffc2cf; }
+    .download-history-info { min-width: 0; flex: 1; }
+    .download-history-time { color: var(--muted); font-size: .78rem; white-space: nowrap; }
+
     @media (max-width: 800px) {
       .layout { grid-template-columns: 1fr; }
       aside { position: static; }
@@ -467,6 +522,16 @@
           folder-access popup. Select
           <code>C:\TURBOC3\BIN</code> to save files directly there.
         </p>
+      </section>
+
+
+
+      <section class="download-history" aria-labelledby="downloadHistoryTitle">
+        <h2 id="downloadHistoryTitle">Recent Downloads</h2>
+        <p class="download-history-note">The filenames and download status will appear here when you download a program.</p>
+        <div class="download-history-list" id="downloadHistoryList" aria-live="polite">
+          <div class="download-history-empty" id="downloadHistoryEmpty">No programs downloaded yet.</div>
+        </div>
       </section>
 
       <details class="program" id="p1" open>
@@ -1370,6 +1435,55 @@ Sorted numbers: 1 2 3 4 5</pre>
       p10: "InsertionSort.CPP"
     };
 
+    // Show download filenames and statuses directly on the webpage.
+    const downloadHistoryList = document.getElementById("downloadHistoryList");
+    const downloadHistoryEmpty = document.getElementById("downloadHistoryEmpty");
+
+    function updateDownloadHistory(fileName, status, state) {
+      if (downloadHistoryEmpty) downloadHistoryEmpty.remove();
+
+      let item = Array.from(downloadHistoryList.querySelectorAll(".download-history-item"))
+        .find(function(row) { return row.dataset.fileName === fileName; });
+
+      if (!item) {
+        item = document.createElement("div");
+        item.className = "download-history-item";
+        item.dataset.fileName = fileName;
+
+        const icon = document.createElement("div");
+        icon.className = "download-history-icon";
+        icon.textContent = "📄";
+
+        const info = document.createElement("div");
+        info.className = "download-history-info";
+
+        const name = document.createElement("div");
+        name.className = "download-history-file";
+        name.textContent = fileName;
+
+        const statusText = document.createElement("div");
+        statusText.className = "download-history-status";
+
+        info.appendChild(name);
+        info.appendChild(statusText);
+
+        const time = document.createElement("div");
+        time.className = "download-history-time";
+
+        item.appendChild(icon);
+        item.appendChild(info);
+        item.appendChild(time);
+        downloadHistoryList.prepend(item);
+      }
+
+      item.classList.remove("success", "pending", "error");
+      item.classList.add(state || "pending");
+      item.querySelector(".download-history-status").textContent = status;
+      item.querySelector(".download-history-time").textContent = new Date().toLocaleTimeString([], {
+        hour: "2-digit", minute: "2-digit"
+      });
+    }
+
     // Download each C++ program.
     document.querySelectorAll(".download").forEach(function(button) {
       button.addEventListener("click", async function() {
@@ -1385,6 +1499,7 @@ Sorted numbers: 1 2 3 4 5</pre>
             "Allow folder access first. Select C:\\TURBOC3\\BIN in the folder picker, then click Download .CPP again.",
             false
           );
+          updateDownloadHistory(fileName, "Waiting for folder access — click Download .CPP again after selecting the folder.", "pending");
           return;
         }
 
@@ -1393,6 +1508,7 @@ Sorted numbers: 1 2 3 4 5</pre>
         try {
           if (turboBinDirectory) {
             button.textContent = "Saving...";
+            updateDownloadHistory(fileName, "Saving to selected folder…", "pending");
 
             // Save directly in the selected BIN folder.
             // No additional subfolder is created.
@@ -1406,6 +1522,7 @@ Sorted numbers: 1 2 3 4 5</pre>
             await writable.close();
 
             button.textContent = "Saved!";
+            updateDownloadHistory(fileName, "Saved to selected folder successfully ✓", "success");
 
             setTimeout(function() {
               button.textContent = originalText;
@@ -1416,6 +1533,9 @@ Sorted numbers: 1 2 3 4 5</pre>
           }
 
           // Fallback for browsers that do not support the folder picker.
+          button.textContent = "Starting...";
+          updateDownloadHistory(fileName, "Starting browser download…", "pending");
+
           const blob = new Blob(
             [code],
             { type: "text/plain;charset=utf-8" }
@@ -1434,10 +1554,7 @@ Sorted numbers: 1 2 3 4 5</pre>
             URL.revokeObjectURL(url);
           }, 1000);
 
-          alert(
-            "Your browser downloaded the CPP file using its normal download settings. " +
-            "Move it to C:\\TURBOC3\\BIN manually if required."
-          );
+          updateDownloadHistory(fileName, "Download started — check your browser's Downloads to confirm it finished. Move it to C:\\TURBOC3\\BIN manually if required.", "success");
 
           button.textContent = originalText;
           button.disabled = false;
@@ -1446,7 +1563,9 @@ Sorted numbers: 1 2 3 4 5</pre>
 
           if (error.name === "AbortError") {
             button.textContent = originalText;
+            updateDownloadHistory(fileName, "Save cancelled.", "error");
           } else {
+            updateDownloadHistory(fileName, "Could not save this file. Please try again.", "error");
             alert(
               "Could not save the program. Please grant folder access again " +
               "and select C:\\TURBOC3\\BIN."
