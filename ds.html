@@ -93,8 +93,10 @@
       align-items: center;
       gap: 10px;
       margin: 18px 0 8px;
+      flex-wrap: wrap;
     }
     .code-heading h3 { margin: 0; font-size: .98rem; }
+    .code-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     button {
       border: 1px solid #247d76;
       color: #eafffa;
@@ -105,6 +107,13 @@
       font-weight: 700;
     }
     button:hover { background: #167267; }
+    .download {
+      background: #173b67;
+      border-color: #3266a0;
+      color: #e8f2ff;
+    }
+    .download:hover { background: #24558b; }
+    button:disabled { opacity: .7; cursor: wait; }
     pre {
       margin: 0;
       padding: 17px;
@@ -141,6 +150,7 @@
       aside nav { grid-template-columns: 1fr; }
       .program-content { padding: 12px; }
       pre { font-size: 12px; padding: 12px; }
+      .code-heading { align-items: flex-start; }
     }
   </style>
 </head>
@@ -172,15 +182,15 @@
     <main>
       <section class="intro">
         <h2>How to use this page</h2>
-        <p>Choose a program from the menu or open a section below. Press <strong>Copy code</strong> to copy its C++ source. The examples use the older Turbo C++ style headers (<code>iostream.h</code> and <code>conio.h</code>), matching the supplied practical programs.</p>
-        <p>When hosted on HTTPS or localhost, open this page once while online to make it available offline.</p>
+        <p>Choose a program from the menu or open a section below. Press <strong>Copy code</strong> to copy its C++ source, or <strong>Download .CPP</strong> to save it as a Turbo C++ source file.</p>
+        <p>For direct saving, use Chrome or Edge over HTTPS/localhost. The first time, select your <code>C:\TURBOC3\BIN</code> folder when prompted. The page will create a <code>Data Structure</code> folder inside it if needed.</p>
       </section>
 
       <details class="program" id="p1" open>
         <summary>1. List ADT using Arrays and Linked Lists</summary>
         <div class="program-content">
           <p class="description">Displays an array and a linked list, then deletes the value 20 from each.</p>
-          <div class="code-heading"><h3>C++ Source Code</h3><button class="copy">Copy code</button></div>
+          <div class="code-heading"><h3>C++ Source Code</h3><div class="code-actions"><button class="copy">Copy code</button><button class="download">Download .CPP</button></div></div>
           <pre class="source"><code>#include&lt;iostream.h&gt;
 #include&lt;conio.h&gt;
 
@@ -206,7 +216,7 @@ void main()
         arr[i]=arr[i+1];
     n--;
 
-    cout&lt;&lt;"\\nAfter deletion: ";
+    cout&lt;&lt;"\nAfter deletion: ";
     for(i=0;i&lt;n;i++)
         cout&lt;&lt;arr[i]&lt;&lt;" ";
 
@@ -225,7 +235,7 @@ void main()
         p=temp;
     }
 
-    cout&lt;&lt;"\\nLinked List: ";
+    cout&lt;&lt;"\nLinked List: ";
     p=head;
     while(p!=NULL)
     {
@@ -239,7 +249,7 @@ void main()
     p-&gt;next=temp-&gt;next;
     delete temp;
 
-    cout&lt;&lt;"\\nAfter deletion: ";
+    cout&lt;&lt;"\nAfter deletion: ";
     p=head;
     while(p!=NULL)
     {
@@ -261,7 +271,7 @@ After deletion: 10 30</pre>
         <summary>2. Linear Search</summary>
         <div class="program-content">
           <p class="description">Checks each array element one by one until the required number is found.</p>
-          <div class="code-heading"><h3>C++ Source Code</h3><button class="copy">Copy code</button></div>
+          <div class="code-heading"><h3>C++ Source Code</h3><div class="code-actions"><button class="copy">Copy code</button><button class="download">Download .CPP</button></div></div>
           <pre class="source"><code>#include&lt;iostream.h&gt;
 #include&lt;conio.h&gt;
 
@@ -305,7 +315,7 @@ Number found at position 3</pre>
         <summary>3. Stack ADT using a Singly Linked List</summary>
         <div class="program-content">
           <p class="description">Offers Push, Pop, and Display operations. A stack follows LIFO: Last In, First Out.</p>
-          <div class="code-heading"><h3>C++ Source Code</h3><button class="copy">Copy code</button></div>
+          <div class="code-heading"><h3>C++ Source Code</h3><div class="code-actions"><button class="copy">Copy code</button><button class="download">Download .CPP</button></div></div>
           <pre class="source"><code>#include&lt;iostream.h&gt;
 #include&lt;conio.h&gt;
 
@@ -323,7 +333,7 @@ void main()
 
     do
     {
-        cout&lt;&lt;"\\n1.Push 2.Pop 3.Display 4.Exit: ";
+        cout&lt;&lt;"\n1.Push 2.Pop 3.Display 4.Exit: ";
         cin&gt;&gt;ch;
 
         if(ch==1)
@@ -377,7 +387,7 @@ Deleted: 20
         <summary>4. Binary Search</summary>
         <div class="program-content">
           <p class="description">Searches a sorted array by repeatedly checking its middle element.</p>
-          <div class="code-heading"><h3>C++ Source Code</h3><button class="copy">Copy code</button></div>
+          <div class="code-heading"><h3>C++ Source Code</h3><div class="code-actions"><button class="copy">Copy code</button><button class="download">Download .CPP</button></div></div>
           <pre class="source"><code>#include&lt;iostream.h&gt;
 #include&lt;conio.h&gt;
 
@@ -431,7 +441,7 @@ Number found at position 4</pre>
         <summary>5. Queue ADT using a Singly Linked List</summary>
         <div class="program-content">
           <p class="description">Offers Insert, Delete, and Display operations. A queue follows FIFO: First In, First Out.</p>
-          <div class="code-heading"><h3>C++ Source Code</h3><button class="copy">Copy code</button></div>
+          <div class="code-heading"><h3>C++ Source Code</h3><div class="code-actions"><button class="copy">Copy code</button><button class="download">Download .CPP</button></div></div>
           <pre class="source"><code>#include&lt;iostream.h&gt;
 #include&lt;conio.h&gt;
 
@@ -449,7 +459,7 @@ void main()
 
     do
     {
-        cout&lt;&lt;"\\n1.Insert 2.Delete 3.Display 4.Exit: ";
+        cout&lt;&lt;"\n1.Insert 2.Delete 3.Display 4.Exit: ";
         cin&gt;&gt;ch;
 
         if(ch==1)
@@ -514,7 +524,7 @@ Deleted: 10
         <summary>6. Bubble Sort</summary>
         <div class="program-content">
           <p class="description">Compares neighbouring values and swaps them when they are in the wrong order.</p>
-          <div class="code-heading"><h3>C++ Source Code</h3><button class="copy">Copy code</button></div>
+          <div class="code-heading"><h3>C++ Source Code</h3><div class="code-actions"><button class="copy">Copy code</button><button class="download">Download .CPP</button></div></div>
           <pre class="source"><code>#include&lt;iostream.h&gt;
 #include&lt;conio.h&gt;
 
@@ -560,7 +570,7 @@ Sorted numbers: 1 2 3 4 5</pre>
         <summary>7. Breadth-First Search (BFS)</summary>
         <div class="program-content">
           <p class="description">Visits graph vertices level by level, starting at vertex 0.</p>
-          <div class="code-heading"><h3>C++ Source Code</h3><button class="copy">Copy code</button></div>
+          <div class="code-heading"><h3>C++ Source Code</h3><div class="code-actions"><button class="copy">Copy code</button><button class="download">Download .CPP</button></div></div>
           <pre class="source"><code>#include&lt;iostream.h&gt;
 #include&lt;conio.h&gt;
 
@@ -573,7 +583,7 @@ void main()
     cout&lt;&lt;"Enter number of vertices: ";
     cin&gt;&gt;n;
 
-    cout&lt;&lt;"Enter adjacency matrix:\\n";
+    cout&lt;&lt;"Enter adjacency matrix:\n";
     for(i=0;i&lt;n;i++)
         for(j=0;j&lt;n;j++)
             cin&gt;&gt;a[i][j];
@@ -615,7 +625,7 @@ BFS: 0 1 2 3</pre>
         <summary>8. Selection Sort</summary>
         <div class="program-content">
           <p class="description">Finds the smallest value in the unsorted part and moves it to the next position.</p>
-          <div class="code-heading"><h3>C++ Source Code</h3><button class="copy">Copy code</button></div>
+          <div class="code-heading"><h3>C++ Source Code</h3><div class="code-actions"><button class="copy">Copy code</button><button class="download">Download .CPP</button></div></div>
           <pre class="source"><code>#include&lt;iostream.h&gt;
 #include&lt;conio.h&gt;
 
@@ -661,7 +671,7 @@ Sorted numbers: 1 2 3 4 5</pre>
         <summary>9. Depth-First Search (DFS)</summary>
         <div class="program-content">
           <p class="description">Visits a vertex and explores an unvisited neighbour as deeply as possible before returning.</p>
-          <div class="code-heading"><h3>C++ Source Code</h3><button class="copy">Copy code</button></div>
+          <div class="code-heading"><h3>C++ Source Code</h3><div class="code-actions"><button class="copy">Copy code</button><button class="download">Download .CPP</button></div></div>
           <pre class="source"><code>#include&lt;iostream.h&gt;
 #include&lt;conio.h&gt;
 
@@ -686,7 +696,7 @@ void main()
     cout&lt;&lt;"Enter number of vertices: ";
     cin&gt;&gt;n;
 
-    cout&lt;&lt;"Enter adjacency matrix:\\n";
+    cout&lt;&lt;"Enter adjacency matrix:\n";
     for(i=0;i&lt;n;i++)
         for(j=0;j&lt;n;j++)
             cin&gt;&gt;a[i][j];
@@ -711,7 +721,7 @@ DFS: 0 1 3 2</pre>
         <summary>10. Insertion Sort</summary>
         <div class="program-content">
           <p class="description">Takes each value and inserts it into the correct place in the already-sorted part.</p>
-          <div class="code-heading"><h3>C++ Source Code</h3><button class="copy">Copy code</button></div>
+          <div class="code-heading"><h3>C++ Source Code</h3><div class="code-actions"><button class="copy">Copy code</button><button class="download">Download .CPP</button></div></div>
           <pre class="source"><code>#include&lt;iostream.h&gt;
 #include&lt;conio.h&gt;
 
@@ -765,6 +775,7 @@ Sorted numbers: 1 2 3 4 5</pre>
       });
     }
 
+    // Copy source code.
     document.querySelectorAll(".copy").forEach(function(button) {
       button.addEventListener("click", async function() {
         const code = button.closest(".program-content").querySelector(".source code").innerText;
@@ -785,6 +796,7 @@ Sorted numbers: 1 2 3 4 5</pre>
       });
     });
 
+    // Copy sample output.
     document.querySelectorAll(".copy-output").forEach(function(button) {
       button.addEventListener("click", async function() {
         const output = button.closest(".program-content").querySelector(".output").innerText;
@@ -805,6 +817,90 @@ Sorted numbers: 1 2 3 4 5</pre>
       });
     });
 
+    // Each program gets its own Turbo C++ source filename.
+    const programFileNames = {
+      p1: "List_ADT.CPP",
+      p2: "Linear_Search.CPP",
+      p3: "Stack_ADT.CPP",
+      p4: "Binary_Search.CPP",
+      p5: "Queue_ADT.CPP",
+      p6: "Bubble_Sort.CPP",
+      p7: "BFS.CPP",
+      p8: "Selection_Sort.CPP",
+      p9: "DFS.CPP",
+      p10: "Insertion_Sort.CPP"
+    };
+
+    // Browser folder access is permission-based and requires a supported browser.
+    let turboBinDirectory = null;
+
+    document.querySelectorAll(".download").forEach(function(button) {
+      button.addEventListener("click", async function() {
+        const section = button.closest(".program");
+        const code = section.querySelector(".source code").innerText;
+        const fileName = programFileNames[section.id];
+
+        if (!window.showDirectoryPicker) {
+          // Fallback: normal browser download, which uses the browser's Downloads location.
+          const blob = new Blob([code], { type: "text/plain;charset=utf-8" });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = fileName;
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          URL.revokeObjectURL(url);
+          alert(
+            "Your browser does not support choosing a folder directly. " +
+            "The CPP file was sent to your normal download location. " +
+            "Move it to C:\\TURBOC3\\BIN\\Data Structure manually."
+          );
+          return;
+        }
+
+        const originalText = button.textContent;
+        button.disabled = true;
+
+        try {
+          if (!turboBinDirectory) {
+            button.textContent = "Select BIN folder...";
+            // Select C:\\TURBOC3\\BIN, not the Data Structure folder.
+            turboBinDirectory = await window.showDirectoryPicker({ mode: "readwrite" });
+          }
+
+          button.textContent = "Saving...";
+          const dataFolder = await turboBinDirectory.getDirectoryHandle(
+            "Data Structure",
+            { create: true }
+          );
+          const fileHandle = await dataFolder.getFileHandle(fileName, { create: true });
+          const writable = await fileHandle.createWritable();
+          await writable.write(code);
+          await writable.close();
+
+          button.textContent = "Downloaded!";
+          setTimeout(function() {
+            button.textContent = originalText;
+            button.disabled = false;
+          }, 1500);
+        } catch (error) {
+          if (error.name === "AbortError") {
+            button.textContent = originalText;
+          } else {
+            console.error("Could not save C++ file:", error);
+            alert(
+              "Could not save the program. Please select C:\\TURBOC3\\BIN " +
+              "and allow folder access when prompted."
+            );
+            button.textContent = originalText;
+          }
+          button.disabled = false;
+        }
+      });
+    });
+
+    // Search programs by title or content.
     document.getElementById("search").addEventListener("input", function() {
       const query = this.value.toLowerCase().trim();
       document.querySelectorAll(".program").forEach(function(section) {
