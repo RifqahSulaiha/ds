@@ -396,8 +396,8 @@
       </p>
 
       <p class="folder-note">
-        Folder access is optional. You can continue without it, but direct
-        saving requires a supported browser such as Chrome or Edge.
+        Folder access is optional. If your browser does not support it,
+        programs will use normal browser downloads instead.
       </p>
 
       <div
@@ -1243,10 +1243,11 @@ Sorted numbers: 1 2 3 4 5</pre>
       folderStatus.hidden = false;
     }
 
-    // The popup is displayed when the website opens.
     // Browsers require a user click before showing the native folder picker.
     window.addEventListener("DOMContentLoaded", function() {
-      showFolderPopup();
+      if (window.showDirectoryPicker) {
+        showFolderPopup();
+      }
     });
 
     allowFolderButton.addEventListener("click", async function() {
