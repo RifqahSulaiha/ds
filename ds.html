@@ -4,10 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Data Structures - C++ Practical Programs</title>
+
   <style>
     :root {
       --bg: #0b1020;
       --panel: #131b2e;
+      --panel2: #0e1728;
       --text: #e8eefc;
       --muted: #a8b4cc;
       --accent: #00c9a7;
@@ -16,6 +18,7 @@
     }
 
     * { box-sizing: border-box; }
+
     html { scroll-behavior: smooth; }
 
     body {
@@ -24,6 +27,10 @@
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
+    }
+
+    body.modal-open {
+      overflow: hidden;
     }
 
     header {
@@ -39,6 +46,7 @@
     }
 
     header p { margin: 0; color: var(--muted); }
+
     .accent { color: var(--accent); }
 
     .layout {
@@ -59,7 +67,10 @@
       background: var(--panel);
     }
 
-    aside h2 { margin: 0 0 12px; font-size: 1rem; }
+    aside h2 {
+      margin: 0 0 12px;
+      font-size: 1rem;
+    }
 
     aside a {
       display: block;
@@ -78,18 +89,18 @@
 
     main { min-width: 0; }
 
-    .intro, .program {
+    .intro {
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: 14px;
-    }
-
-    .intro {
       padding: 20px;
       margin-bottom: 18px;
     }
 
     .program {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--panel);
       margin-bottom: 18px;
       overflow: hidden;
       scroll-margin-top: 16px;
@@ -105,8 +116,13 @@
     }
 
     .program summary:hover { background: #1b2b43; }
+
     .program-content { padding: 18px; }
-    .description { color: var(--muted); margin-top: 0; }
+
+    .description {
+      color: var(--muted);
+      margin-top: 0;
+    }
 
     .code-heading {
       display: flex;
@@ -117,7 +133,10 @@
       flex-wrap: wrap;
     }
 
-    .code-heading h3 { margin: 0; font-size: .98rem; }
+    .code-heading h3 {
+      margin: 0;
+      font-size: .98rem;
+    }
 
     .code-actions {
       display: flex;
@@ -131,13 +150,23 @@
       color: #eafffa;
       background: #125c56;
       border-radius: 7px;
-      padding: 8px 11px;
+      padding: 7px 11px;
       cursor: pointer;
       font-weight: 700;
+      font-family: inherit;
     }
 
     button:hover { background: #167267; }
-    button:disabled { opacity: .65; cursor: wait; }
+
+    button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    button:disabled {
+      opacity: .7;
+      cursor: wait;
+    }
 
     .download {
       background: #173b67;
@@ -183,9 +212,8 @@
       color: var(--text);
     }
 
-    /* Folder-access dialog */
-
-    .access-overlay {
+    /* Folder access popup */
+    .modal-overlay {
       position: fixed;
       inset: 0;
       z-index: 9999;
@@ -193,66 +221,132 @@
       align-items: center;
       justify-content: center;
       padding: 18px;
-      background: rgba(3, 8, 18, .88);
-      backdrop-filter: blur(7px);
+      background: rgba(3, 8, 18, .82);
+      backdrop-filter: blur(8px);
     }
 
-    .access-overlay[hidden] { display: none; }
+    .modal-overlay[hidden] {
+      display: none;
+    }
 
-    .access-dialog {
-      width: min(520px, 100%);
-      padding: 26px;
-      border: 1px solid #247d76;
+    .folder-modal {
+      width: min(460px, 100%);
+      padding: 28px;
+      border: 1px solid #285b60;
+      border-radius: 20px;
+      background: linear-gradient(145deg, #131f32, #0d1727);
+      box-shadow: 0 24px 90px rgba(0, 0, 0, .55);
+      animation: popupIn .22s ease-out;
+    }
+
+    @keyframes popupIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .modal-icon {
+      width: 58px;
+      height: 58px;
+      display: grid;
+      place-items: center;
       border-radius: 16px;
-      background: #131b2e;
-      box-shadow: 0 24px 80px rgba(0, 0, 0, .45);
+      background: rgba(0, 201, 167, .12);
+      border: 1px solid rgba(0, 201, 167, .3);
+      font-size: 28px;
+      margin-bottom: 18px;
     }
 
-    .access-dialog h2 {
+    .folder-modal h2 {
       margin: 0 0 8px;
-      font-size: 1.4rem;
+      font-size: 1.45rem;
     }
 
-    .access-dialog p { color: var(--muted); }
+    .folder-modal p {
+      color: var(--muted);
+      margin: 0 0 16px;
+    }
 
-    .target-path {
-      display: block;
-      padding: 12px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--code);
-      color: var(--accent);
-      overflow-wrap: anywhere;
+    .folder-path {
+      padding: 13px 14px;
+      border: 1px solid #285052;
+      border-radius: 10px;
+      background: #071b1a;
+      color: #8ff5df;
       font-family: Consolas, Monaco, monospace;
+      font-size: .95rem;
+      overflow-wrap: anywhere;
+      margin: 16px 0;
     }
 
-    .access-actions {
+    .folder-note {
+      font-size: .85rem;
+      line-height: 1.5;
+    }
+
+    .modal-actions {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: 10px;
-      margin-top: 18px;
+      margin-top: 22px;
     }
 
-    .access-actions button { min-height: 42px; }
-
-    .secondary {
-      background: #202c42;
-      border-color: #42516b;
+    .modal-actions button {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: .95rem;
     }
 
-    .access-status {
-      min-height: 1.5em;
-      margin: 14px 0 0 !important;
-      font-weight: 700;
+    .allow-button {
+      background: #00a98e;
+      color: #041713;
+      border-color: #00c9a7;
     }
 
-    .access-status.success { color: #7cf3ce; }
-    .access-status.error { color: #ffaaa8; }
-    .access-status.info { color: #b7d7ff; }
+    .allow-button:hover {
+      background: #22dfbd;
+    }
+
+    .later-button {
+      background: transparent;
+      color: var(--muted);
+      border-color: var(--border);
+    }
+
+    .later-button:hover {
+      background: #1b2b43;
+      color: var(--text);
+    }
+
+    .folder-status {
+      margin-top: 14px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: #102b2a;
+      color: #9bf7e2;
+      font-size: .9rem;
+      overflow-wrap: anywhere;
+    }
+
+    .folder-status.error {
+      background: #321b26;
+      color: #ffc2cf;
+    }
+
+    .folder-status[hidden] {
+      display: none;
+    }
 
     @media (max-width: 800px) {
       .layout { grid-template-columns: 1fr; }
       aside { position: static; }
+
       aside nav {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -265,43 +359,64 @@
       .program-content { padding: 12px; }
       pre { font-size: 12px; padding: 12px; }
       .code-heading { align-items: flex-start; }
-      .access-dialog { padding: 20px; }
-      .access-actions { flex-direction: column; }
-      .access-actions button { width: 100%; }
+
+      .folder-modal { padding: 22px; }
+      .folder-modal h2 { font-size: 1.25rem; }
     }
   </style>
 </head>
+
 <body>
 
-  <!-- This dialog appears automatically. The browser picker opens only after a click. -->
-  <div class="access-overlay" id="accessOverlay"
-       role="dialog" aria-modal="true" aria-labelledby="accessTitle">
-    <div class="access-dialog">
-      <h2 id="accessTitle"><span class="accent">Allow folder access</span></h2>
+  <!-- Folder access popup appears when the website opens -->
+  <div
+    class="modal-overlay"
+    id="folderModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="folderModalTitle"
+    aria-describedby="folderModalDescription"
+  >
+    <div class="folder-modal">
+      <div class="modal-icon" aria-hidden="true">📁</div>
 
-      <p>
-        Folder permission allows this website to save your C++ practical
-        programs directly into your Turbo C++ folder. Click the button below
-        and select <strong>C:\TURBOC3\BIN</strong> in the browser's folder picker.
-        A <strong>Data Structure</strong> subfolder will be created if necessary.
+      <h2 id="folderModalTitle">Allow Folder Access</h2>
+
+      <p id="folderModalDescription">
+        Choose your Turbo C++ BIN folder so downloaded practical programs
+        can be saved directly into it.
       </p>
 
-      <span class="target-path">C:\TURBOC3\BIN\Data Structure</span>
+      <div class="folder-path">C:\TURBOC3\BIN</div>
 
-      <div class="access-actions">
-        <button type="button" id="allowFolderAccess">
+      <p class="folder-note">
+        Click the button below, then select the <strong>BIN</strong> folder
+        in the browser's folder-selection popup. If your browser asks for
+        permission, allow access.
+      </p>
+
+      <p class="folder-note">
+        Folder access is optional. You can continue without it, but direct
+        saving requires a supported browser such as Chrome or Edge.
+      </p>
+
+      <div
+        class="folder-status"
+        id="folderStatus"
+        role="status"
+        aria-live="polite"
+        hidden
+      ></div>
+
+      <div class="modal-actions">
+        <button class="allow-button" id="allowFolderButton" type="button">
           Allow Folder Access
         </button>
 
-        <button type="button" id="continueWithoutAccess" class="secondary">
+        <button class="later-button" id="skipFolderButton" type="button">
           Continue Without Folder Access
         </button>
       </div>
-
-      <p id="accessStatus" class="access-status info"
-         role="status" aria-live="polite">
-        Select Allow Folder Access to choose your BIN folder.
-      </p>
     </div>
   </div>
 
@@ -314,8 +429,13 @@
     <aside>
       <h2>Quick navigation</h2>
 
-      <input class="search" id="search" type="search"
-             placeholder="Search programs..." aria-label="Search programs">
+      <input
+        class="search"
+        id="search"
+        type="search"
+        placeholder="Search programs..."
+        aria-label="Search programs"
+      >
 
       <nav id="nav">
         <a href="#p1">1. List ADT</a>
@@ -334,24 +454,24 @@
     <main>
       <section class="intro">
         <h2>How to use this page</h2>
+
         <p>
-          Open a program using the menu. Each program has separate
-          <strong>Copy Code</strong>, <strong>Copy Output</strong>, and
-          <strong>Download .CPP</strong> buttons.
+          Choose a program from the menu or open a section below.
+          Press <strong>Copy code</strong> to copy its C++ source,
+          <strong>Copy output</strong> to copy the sample output, or
+          <strong>Download .CPP</strong> to save a Turbo C++ source file.
         </p>
+
         <p>
-          For direct saving, use Chrome or Edge over HTTPS or localhost.
-          When asked, select <code>C:\TURBOC3\BIN</code>. The website will
-          create <code>Data Structure</code> inside the selected folder.
-          If you continue without folder access, you can grant it later
-          when downloading a program.
+          Direct saving uses the folder you select in the browser's
+          folder-access popup. Select
+          <code>C:\TURBOC3\BIN</code> to save files directly there.
         </p>
       </section>
 
-      <!-- 1. LIST ADT -->
-
       <details class="program" id="p1" open>
         <summary>1. List ADT using Arrays and Linked Lists</summary>
+
         <div class="program-content">
           <p class="description">
             Displays an array and a linked list, then deletes the value 20 from each.
@@ -360,8 +480,8 @@
           <div class="code-heading">
             <h3>C++ Source Code</h3>
             <div class="code-actions">
-              <button class="copy">Copy Code</button>
-              <button class="download">Download .CPP</button>
+              <button class="copy" type="button">Copy code</button>
+              <button class="download" type="button">Download .CPP</button>
             </div>
           </div>
 
@@ -436,7 +556,7 @@ void main()
 
           <div class="code-heading">
             <h3>Sample Output</h3>
-            <button class="copy-output">Copy Output</button>
+            <button class="copy-output" type="button">Copy output</button>
           </div>
 
           <pre class="output">Array List: 10 20 30
@@ -446,10 +566,9 @@ After deletion: 10 30</pre>
         </div>
       </details>
 
-      <!-- 2. LINEAR SEARCH -->
-
       <details class="program" id="p2">
         <summary>2. Linear Search</summary>
+
         <div class="program-content">
           <p class="description">
             Checks each array element one by one until the required number is found.
@@ -458,8 +577,8 @@ After deletion: 10 30</pre>
           <div class="code-heading">
             <h3>C++ Source Code</h3>
             <div class="code-actions">
-              <button class="copy">Copy Code</button>
-              <button class="download">Download .CPP</button>
+              <button class="copy" type="button">Copy code</button>
+              <button class="download" type="button">Download .CPP</button>
             </div>
           </div>
 
@@ -497,7 +616,7 @@ void main()
 
           <div class="code-heading">
             <h3>Sample Output</h3>
-            <button class="copy-output">Copy Output</button>
+            <button class="copy-output" type="button">Copy output</button>
           </div>
 
           <pre class="output">Enter size: 5
@@ -507,21 +626,19 @@ Number found at position 3</pre>
         </div>
       </details>
 
-      <!-- 3. STACK ADT -->
-
       <details class="program" id="p3">
         <summary>3. Stack ADT using a Singly Linked List</summary>
+
         <div class="program-content">
           <p class="description">
-            Offers Push, Pop, and Display operations. A stack follows
-            LIFO: Last In, First Out.
+            Offers Push, Pop, and Display operations. A stack follows LIFO: Last In, First Out.
           </p>
 
           <div class="code-heading">
             <h3>C++ Source Code</h3>
             <div class="code-actions">
-              <button class="copy">Copy Code</button>
-              <button class="download">Download .CPP</button>
+              <button class="copy" type="button">Copy code</button>
+              <button class="download" type="button">Download .CPP</button>
             </div>
           </div>
 
@@ -578,7 +695,7 @@ void main()
 
           <div class="code-heading">
             <h3>Sample Output</h3>
-            <button class="copy-output">Copy Output</button>
+            <button class="copy-output" type="button">Copy output</button>
           </div>
 
           <pre class="output">1.Push 2.Pop 3.Display 4.Exit: 1
@@ -597,10 +714,9 @@ Deleted: 20
         </div>
       </details>
 
-      <!-- 4. BINARY SEARCH -->
-
       <details class="program" id="p4">
         <summary>4. Binary Search</summary>
+
         <div class="program-content">
           <p class="description">
             Searches a sorted array by repeatedly checking its middle element.
@@ -609,8 +725,8 @@ Deleted: 20
           <div class="code-heading">
             <h3>C++ Source Code</h3>
             <div class="code-actions">
-              <button class="copy">Copy Code</button>
-              <button class="download">Download .CPP</button>
+              <button class="copy" type="button">Copy code</button>
+              <button class="download" type="button">Download .CPP</button>
             </div>
           </div>
 
@@ -658,7 +774,7 @@ void main()
 
           <div class="code-heading">
             <h3>Sample Output</h3>
-            <button class="copy-output">Copy Output</button>
+            <button class="copy-output" type="button">Copy output</button>
           </div>
 
           <pre class="output">Enter size: 5
@@ -668,21 +784,19 @@ Number found at position 4</pre>
         </div>
       </details>
 
-      <!-- 5. QUEUE ADT -->
-
       <details class="program" id="p5">
         <summary>5. Queue ADT using a Singly Linked List</summary>
+
         <div class="program-content">
           <p class="description">
-            Offers Insert, Delete, and Display operations. A queue follows
-            FIFO: First In, First Out.
+            Offers Insert, Delete, and Display operations. A queue follows FIFO: First In, First Out.
           </p>
 
           <div class="code-heading">
             <h3>C++ Source Code</h3>
             <div class="code-actions">
-              <button class="copy">Copy Code</button>
-              <button class="download">Download .CPP</button>
+              <button class="copy" type="button">Copy code</button>
+              <button class="download" type="button">Download .CPP</button>
             </div>
           </div>
 
@@ -750,7 +864,7 @@ void main()
 
           <div class="code-heading">
             <h3>Sample Output</h3>
-            <button class="copy-output">Copy Output</button>
+            <button class="copy-output" type="button">Copy output</button>
           </div>
 
           <pre class="output">1.Insert 2.Delete 3.Display 4.Exit: 1
@@ -769,10 +883,9 @@ Deleted: 10
         </div>
       </details>
 
-      <!-- 6. BUBBLE SORT -->
-
       <details class="program" id="p6">
         <summary>6. Bubble Sort</summary>
+
         <div class="program-content">
           <p class="description">
             Compares neighbouring values and swaps them when they are in the wrong order.
@@ -781,8 +894,8 @@ Deleted: 10
           <div class="code-heading">
             <h3>C++ Source Code</h3>
             <div class="code-actions">
-              <button class="copy">Copy Code</button>
-              <button class="download">Download .CPP</button>
+              <button class="copy" type="button">Copy code</button>
+              <button class="download" type="button">Download .CPP</button>
             </div>
           </div>
 
@@ -823,7 +936,7 @@ void main()
 
           <div class="code-heading">
             <h3>Sample Output</h3>
-            <button class="copy-output">Copy Output</button>
+            <button class="copy-output" type="button">Copy output</button>
           </div>
 
           <pre class="output">Enter size: 5
@@ -832,10 +945,9 @@ Sorted numbers: 1 2 3 4 5</pre>
         </div>
       </details>
 
-      <!-- 7. BREADTH-FIRST SEARCH -->
-
       <details class="program" id="p7">
         <summary>7. Breadth-First Search (BFS)</summary>
+
         <div class="program-content">
           <p class="description">
             Visits graph vertices level by level, starting at vertex 0.
@@ -844,8 +956,8 @@ Sorted numbers: 1 2 3 4 5</pre>
           <div class="code-heading">
             <h3>C++ Source Code</h3>
             <div class="code-actions">
-              <button class="copy">Copy Code</button>
-              <button class="download">Download .CPP</button>
+              <button class="copy" type="button">Copy code</button>
+              <button class="download" type="button">Download .CPP</button>
             </div>
           </div>
 
@@ -891,7 +1003,7 @@ void main()
 
           <div class="code-heading">
             <h3>Sample Output</h3>
-            <button class="copy-output">Copy Output</button>
+            <button class="copy-output" type="button">Copy output</button>
           </div>
 
           <pre class="output">Enter number of vertices: 4
@@ -904,10 +1016,9 @@ BFS: 0 1 2 3</pre>
         </div>
       </details>
 
-      <!-- 8. SELECTION SORT -->
-
       <details class="program" id="p8">
         <summary>8. Selection Sort</summary>
+
         <div class="program-content">
           <p class="description">
             Finds the smallest value in the unsorted part and moves it to the next position.
@@ -916,8 +1027,8 @@ BFS: 0 1 2 3</pre>
           <div class="code-heading">
             <h3>C++ Source Code</h3>
             <div class="code-actions">
-              <button class="copy">Copy Code</button>
-              <button class="download">Download .CPP</button>
+              <button class="copy" type="button">Copy code</button>
+              <button class="download" type="button">Download .CPP</button>
             </div>
           </div>
 
@@ -958,7 +1069,7 @@ void main()
 
           <div class="code-heading">
             <h3>Sample Output</h3>
-            <button class="copy-output">Copy Output</button>
+            <button class="copy-output" type="button">Copy output</button>
           </div>
 
           <pre class="output">Enter size: 5
@@ -967,10 +1078,9 @@ Sorted numbers: 1 2 3 4 5</pre>
         </div>
       </details>
 
-      <!-- 9. DEPTH-FIRST SEARCH -->
-
       <details class="program" id="p9">
         <summary>9. Depth-First Search (DFS)</summary>
+
         <div class="program-content">
           <p class="description">
             Visits a vertex and explores an unvisited neighbour as deeply as possible before returning.
@@ -979,8 +1089,8 @@ Sorted numbers: 1 2 3 4 5</pre>
           <div class="code-heading">
             <h3>C++ Source Code</h3>
             <div class="code-actions">
-              <button class="copy">Copy Code</button>
-              <button class="download">Download .CPP</button>
+              <button class="copy" type="button">Copy code</button>
+              <button class="download" type="button">Download .CPP</button>
             </div>
           </div>
 
@@ -1021,7 +1131,7 @@ void main()
 
           <div class="code-heading">
             <h3>Sample Output</h3>
-            <button class="copy-output">Copy Output</button>
+            <button class="copy-output" type="button">Copy output</button>
           </div>
 
           <pre class="output">Enter number of vertices: 4
@@ -1034,10 +1144,9 @@ DFS: 0 1 3 2</pre>
         </div>
       </details>
 
-      <!-- 10. INSERTION SORT -->
-
       <details class="program" id="p10">
         <summary>10. Insertion Sort</summary>
+
         <div class="program-content">
           <p class="description">
             Takes each value and inserts it into the correct place in the already-sorted part.
@@ -1046,8 +1155,8 @@ DFS: 0 1 3 2</pre>
           <div class="code-heading">
             <h3>C++ Source Code</h3>
             <div class="code-actions">
-              <button class="copy">Copy Code</button>
-              <button class="download">Download .CPP</button>
+              <button class="copy" type="button">Copy code</button>
+              <button class="download" type="button">Download .CPP</button>
             </div>
           </div>
 
@@ -1089,7 +1198,7 @@ void main()
 
           <div class="code-heading">
             <h3>Sample Output</h3>
-            <button class="copy-output">Copy Output</button>
+            <button class="copy-output" type="button">Copy output</button>
           </div>
 
           <pre class="output">Enter size: 5
@@ -1103,24 +1212,150 @@ Sorted numbers: 1 2 3 4 5</pre>
   <footer>Data Structures Practical Programs · HTML, CSS and JavaScript</footer>
 
   <script>
-    /*
-      Optional service-worker registration.
-      For offline support, service-worker.js must exist beside this HTML file.
-    */
-    if (
-      "serviceWorker" in navigator &&
-      (
-        location.protocol === "https:" ||
-        location.hostname === "localhost" ||
-        location.hostname === "127.0.0.1"
-      )
-    ) {
-      navigator.serviceWorker.register("./service-worker.js").catch(function (error) {
-        console.warn("Offline support is unavailable:", error);
+    // Register the service worker if one is available.
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./service-worker.js").catch(function(error) {
+        console.error("Could not enable offline page loading:", error);
       });
     }
 
-    // Exact filenames: no spaces, underscores, or hyphens.
+    // Folder access state.
+    let turboBinDirectory = null;
+
+    const folderModal = document.getElementById("folderModal");
+    const folderStatus = document.getElementById("folderStatus");
+    const allowFolderButton = document.getElementById("allowFolderButton");
+    const skipFolderButton = document.getElementById("skipFolderButton");
+
+    function showFolderPopup() {
+      folderModal.hidden = false;
+      document.body.classList.add("modal-open");
+    }
+
+    function closeFolderPopup() {
+      folderModal.hidden = true;
+      document.body.classList.remove("modal-open");
+    }
+
+    function showFolderStatus(message, isError) {
+      folderStatus.textContent = message;
+      folderStatus.classList.toggle("error", Boolean(isError));
+      folderStatus.hidden = false;
+    }
+
+    // The popup is displayed when the website opens.
+    // Browsers require a user click before showing the native folder picker.
+    window.addEventListener("DOMContentLoaded", function() {
+      showFolderPopup();
+    });
+
+    allowFolderButton.addEventListener("click", async function() {
+      if (!window.showDirectoryPicker) {
+        showFolderStatus(
+          "Your browser does not support direct folder access. Use the latest Chrome or Edge over HTTPS or localhost, or continue and use normal downloads.",
+          true
+        );
+        return;
+      }
+
+      allowFolderButton.disabled = true;
+      allowFolderButton.textContent = "Opening folder picker...";
+
+      try {
+        const selectedDirectory = await window.showDirectoryPicker({
+          mode: "readwrite"
+        });
+
+        turboBinDirectory = selectedDirectory;
+
+        showFolderStatus(
+          "Folder access granted for the folder you selected. If you selected C:\\TURBOC3\\BIN, files will save directly there.",
+          false
+        );
+
+        allowFolderButton.textContent = "Folder Access Allowed";
+
+        setTimeout(function() {
+          closeFolderPopup();
+        }, 900);
+      } catch (error) {
+        if (error.name === "AbortError") {
+          showFolderStatus(
+            "Folder selection was cancelled. You can try again whenever you are ready.",
+            true
+          );
+        } else {
+          console.error("Folder access error:", error);
+          showFolderStatus(
+            "Could not access that folder. Try again and allow access when your browser asks.",
+            true
+          );
+        }
+
+        allowFolderButton.disabled = false;
+        allowFolderButton.textContent = "Allow Folder Access";
+      }
+    });
+
+    skipFolderButton.addEventListener("click", function() {
+      closeFolderPopup();
+    });
+
+    // Copy source code.
+    document.querySelectorAll(".copy").forEach(function(button) {
+      button.addEventListener("click", async function() {
+        const code = button
+          .closest(".program-content")
+          .querySelector(".source code").innerText;
+
+        try {
+          await navigator.clipboard.writeText(code);
+        } catch (error) {
+          const area = document.createElement("textarea");
+          area.value = code;
+          document.body.appendChild(area);
+          area.select();
+          document.execCommand("copy");
+          area.remove();
+        }
+
+        const originalText = button.textContent;
+        button.textContent = "Copied!";
+
+        setTimeout(function() {
+          button.textContent = originalText;
+        }, 1400);
+      });
+    });
+
+    // Copy sample output.
+    document.querySelectorAll(".copy-output").forEach(function(button) {
+      button.addEventListener("click", async function() {
+        const output = button
+          .closest(".program-content")
+          .querySelector(".output").innerText;
+
+        try {
+          await navigator.clipboard.writeText(output);
+        } catch (error) {
+          const area = document.createElement("textarea");
+          area.value = output;
+          document.body.appendChild(area);
+          area.select();
+          document.execCommand("copy");
+          area.remove();
+        }
+
+        const originalText = button.textContent;
+        button.textContent = "Copied!";
+
+        setTimeout(function() {
+          button.textContent = originalText;
+        }, 1400);
+      });
+    });
+
+    // File names contain no spaces, underscores, or extra symbols.
     const programFileNames = {
       p1: "ListADT.CPP",
       p2: "LinearSearch.CPP",
@@ -1134,326 +1369,106 @@ Sorted numbers: 1 2 3 4 5</pre>
       p10: "InsertionSort.CPP"
     };
 
-    const accessOverlay = document.getElementById("accessOverlay");
-    const allowFolderAccessButton = document.getElementById("allowFolderAccess");
-    const continueWithoutAccessButton = document.getElementById("continueWithoutAccess");
-    const accessStatus = document.getElementById("accessStatus");
-
-    // Kept in memory for this page session only.
-    let turboBinDirectory = null;
-
-    function setAccessStatus(message, type) {
-      accessStatus.textContent = message;
-      accessStatus.className = "access-status " + (type || "info");
-    }
-
-    function openAccessDialog(message, type) {
-      accessOverlay.hidden = false;
-
-      if (message) {
-        setAccessStatus(message, type || "info");
-      }
-    }
-
-    function closeAccessDialog() {
-      accessOverlay.hidden = true;
-    }
-
-    async function requestFolderAccess() {
-      if (!window.showDirectoryPicker) {
-        setAccessStatus(
-          "Direct folder saving is not supported in this browser or page context. Use the browser download instead, then move the file manually.",
-          "error"
-        );
-        return false;
-      }
-
-      allowFolderAccessButton.disabled = true;
-      continueWithoutAccessButton.disabled = true;
-
-      setAccessStatus(
-        "Choose C:\\TURBOC3\\BIN in the folder picker. The Data Structure subfolder will be created inside it.",
-        "info"
-      );
-
-      try {
-        /*
-          The browser requires a user gesture.
-          This function is called from the Allow Folder Access button.
-        */
-        const selectedDirectory = await window.showDirectoryPicker({
-          mode: "readwrite"
-        });
-
-        // Create or verify the destination folder.
-        await selectedDirectory.getDirectoryHandle("Data Structure", {
-          create: true
-        });
-
-        turboBinDirectory = selectedDirectory;
-
-        setAccessStatus(
-          "Folder access granted. Files will be saved in C:\\TURBOC3\\BIN\\Data Structure if you selected C:\\TURBOC3\\BIN.",
-          "success"
-        );
-
-        closeAccessDialog();
-        return true;
-
-      } catch (error) {
-        if (error && error.name === "AbortError") {
-          setAccessStatus(
-            "Folder selection was cancelled. You can try again or continue without folder access.",
-            "info"
-          );
-        } else {
-          console.error("Folder access failed:", error);
-
-          setAccessStatus(
-            "Could not access or create the Data Structure folder. Check the selected folder and permissions, then try again.",
-            "error"
-          );
-        }
-
-        return false;
-
-      } finally {
-        allowFolderAccessButton.disabled = false;
-        continueWithoutAccessButton.disabled = false;
-      }
-    }
-
-    allowFolderAccessButton.addEventListener("click", requestFolderAccess);
-
-    continueWithoutAccessButton.addEventListener("click", function () {
-      closeAccessDialog();
-    });
-
-    // The dialog is visible when the page loads; no automatic picker is forced.
-    document.addEventListener("DOMContentLoaded", function () {
-      openAccessDialog();
-    });
-
-    // Copy text, with a fallback for contexts without the Clipboard API.
-    async function copyText(text) {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text);
-        return;
-      }
-
-      const area = document.createElement("textarea");
-      area.value = text;
-      area.setAttribute("readonly", "");
-      area.style.position = "fixed";
-      area.style.left = "-9999px";
-
-      document.body.appendChild(area);
-      area.select();
-
-      const successful = document.execCommand("copy");
-      area.remove();
-
-      if (!successful) {
-        throw new Error("Clipboard copy was not successful");
-      }
-    }
-
-    // Copy source code.
-    document.querySelectorAll(".copy").forEach(function (button) {
-      button.addEventListener("click", async function () {
-        const source = button
-          .closest(".program-content")
-          .querySelector("pre.source code");
-
-        const code = source.textContent;
-
-        try {
-          await copyText(code);
-          button.textContent = "Copied!";
-
-          setTimeout(function () {
-            button.textContent = "Copy Code";
-          }, 1400);
-
-        } catch (error) {
-          console.error("Copy failed:", error);
-          alert("Could not copy the code. Please select and copy it manually.");
-        }
-      });
-    });
-
-    // Copy sample output.
-    document.querySelectorAll(".copy-output").forEach(function (button) {
-      button.addEventListener("click", async function () {
-        const output = button
-          .closest(".program-content")
-          .querySelector("pre.output").textContent;
-
-        try {
-          await copyText(output);
-          button.textContent = "Copied!";
-
-          setTimeout(function () {
-            button.textContent = "Copy Output";
-          }, 1400);
-
-        } catch (error) {
-          console.error("Copy output failed:", error);
-          alert("Could not copy the output. Please select and copy it manually.");
-        }
-      });
-    });
-
-    // Browser-download fallback.
-    function browserDownload(code, fileName) {
-      const blob = new Blob([code], {
-        type: "text/plain;charset=utf-8"
-      });
-
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-
-      link.href = url;
-      link.download = fileName;
-
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-
-      // Give the browser time to begin the download.
-      setTimeout(function () {
-        URL.revokeObjectURL(url);
-      }, 1500);
-    }
-
-    // Save source code to the selected Data Structure folder.
-    document.querySelectorAll(".download").forEach(function (button) {
-      button.addEventListener("click", async function () {
+    // Download each C++ program.
+    document.querySelectorAll(".download").forEach(function(button) {
+      button.addEventListener("click", async function() {
         const section = button.closest(".program");
-        const sourceElement = section.querySelector("pre.source code");
-        const code = sourceElement.textContent;
+        const code = section.querySelector(".source code").innerText;
         const fileName = programFileNames[section.id];
-        const originalText = "Download .CPP";
+        const originalText = button.textContent;
 
-        if (!fileName || !code) {
-          alert("The source code or filename for this program could not be found.");
+        // If direct folder access has not been granted, ask the user first.
+        if (!turboBinDirectory && window.showDirectoryPicker) {
+          showFolderPopup();
+          showFolderStatus(
+            "Allow folder access first. Select C:\\TURBOC3\\BIN in the folder picker, then click Download .CPP again.",
+            false
+          );
           return;
         }
-
-        // Prevent repeated clicks while saving.
-        if (button.disabled) return;
 
         button.disabled = true;
 
         try {
-          // Unsupported browsers use a regular browser download.
-          if (!window.showDirectoryPicker) {
-            browserDownload(code, fileName);
+          if (turboBinDirectory) {
+            button.textContent = "Saving...";
 
-            alert(
-              "Direct folder access is not supported in this browser or page context. " +
-              fileName +
-              " was sent to your normal Downloads location. " +
-              "Move it manually to C:\\TURBOC3\\BIN\\Data Structure."
+            // Save directly in the selected BIN folder.
+            // No additional subfolder is created.
+            const fileHandle = await turboBinDirectory.getFileHandle(
+              fileName,
+              { create: true }
             );
 
-            return;
-          }
-
-          // If access was skipped, reopen the dialog before saving.
-          if (!turboBinDirectory) {
-            openAccessDialog(
-              "Folder access is required to save " + fileName +
-              ". Click Allow Folder Access and select C:\\TURBOC3\\BIN.",
-              "info"
-            );
-
-            return;
-          }
-
-          button.textContent = "Saving...";
-
-          const dataFolder = await turboBinDirectory.getDirectoryHandle(
-            "Data Structure",
-            { create: true }
-          );
-
-          const fileHandle = await dataFolder.getFileHandle(
-            fileName,
-            { create: true }
-          );
-
-          const writable = await fileHandle.createWritable();
-
-          try {
+            const writable = await fileHandle.createWritable();
             await writable.write(code);
             await writable.close();
-          } catch (writeError) {
-            try {
-              await writable.abort();
-            } catch (abortError) {
-              console.warn("Could not abort the failed write:", abortError);
-            }
 
-            throw writeError;
+            button.textContent = "Saved!";
+
+            setTimeout(function() {
+              button.textContent = originalText;
+              button.disabled = false;
+            }, 1500);
+
+            return;
           }
 
-          // Success is displayed only after write() and close() succeed.
-          button.textContent = "Saved!";
-
-          setAccessStatus(
-            fileName + " saved successfully to the selected Data Structure folder.",
-            "success"
+          // Fallback for browsers that do not support the folder picker.
+          const blob = new Blob(
+            [code],
+            { type: "text/plain;charset=utf-8" }
           );
 
-          setTimeout(function () {
-            button.textContent = originalText;
-          }, 1500);
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
 
+          link.href = url;
+          link.download = fileName;
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+
+          setTimeout(function() {
+            URL.revokeObjectURL(url);
+          }, 1000);
+
+          alert(
+            "Your browser downloaded the CPP file using its normal download settings. " +
+            "Move it to C:\\TURBOC3\\BIN manually if required."
+          );
+
+          button.textContent = originalText;
+          button.disabled = false;
         } catch (error) {
           console.error("Could not save C++ file:", error);
 
-          if (error && error.name === "AbortError") {
-            openAccessDialog(
-              "The folder selection or save was cancelled. Try again when ready.",
-              "info"
-            );
+          if (error.name === "AbortError") {
+            button.textContent = originalText;
           } else {
-            openAccessDialog(
-              "Could not save " + fileName +
-              ". Please grant folder access again and check the folder permissions.",
-              "error"
+            alert(
+              "Could not save the program. Please grant folder access again " +
+              "and select C:\\TURBOC3\\BIN."
             );
+            button.textContent = originalText;
           }
 
-          button.textContent = originalText;
-
-        } finally {
           button.disabled = false;
         }
       });
     });
 
-    // Search program titles, descriptions, source code and sample outputs.
-    document.getElementById("search").addEventListener("input", function () {
+    // Search programs by title or content.
+    document.getElementById("search").addEventListener("input", function() {
       const query = this.value.toLowerCase().trim();
 
-      document.querySelectorAll(".program").forEach(function (section) {
+      document.querySelectorAll(".program").forEach(function(section) {
         const matches = section.innerText.toLowerCase().includes(query);
-
         section.style.display = matches ? "" : "none";
 
         if (query && matches) {
           section.open = true;
         }
-      });
-
-      // Keep quick navigation in sync with the filtered program list.
-      document.querySelectorAll("#nav a").forEach(function (link) {
-        const target = document.querySelector(link.getAttribute("href"));
-
-        link.style.display =
-          !query || (target && target.style.display !== "none") ? "" : "none";
       });
     });
   </script>
