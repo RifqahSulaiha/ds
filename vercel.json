@@ -1,5 +1,14 @@
 {
+  "functions": {
+    "api/next-product.js": {
+      "includeFiles": "Products/**"
+    }
+  },
   "rewrites": [
+    {
+      "source": "/next-product.php",
+      "destination": "/api/next-product"
+    },
     {
       "source": "/",
       "destination": "/ds.html"
