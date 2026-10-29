@@ -1,957 +1,405 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PHP Practical Programs</title>
 
 <style>
-:root {
-    --bg: #0b0b12;
-    --panel: #14141f;
-    --panel2: #1b1b29;
-    --border: #2b2b3c;
-    --text: #f1f1f7;
-    --muted: #a0a0b5;
-    --accent: #a855f7;
-    --accent2: #7c3aed;
-    --green: #34d399;
-    --red: #fb7185;
-}
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-}
-
-header {
-    padding: 22px 28px;
-    border-bottom: 1px solid var(--border);
-    background: #101019;
-}
-
-header h1 {
-    margin: 0 0 8px;
-    font-size: 25px;
-}
-
-header p {
-    margin: 0;
-    color: var(--muted);
-    font-size: 14px;
-}
-
-.app {
-    display: flex;
-    min-height: calc(100vh - 85px);
-}
-
-.sidebar {
-    width: 285px;
-    flex-shrink: 0;
-    background: var(--panel);
-    border-right: 1px solid var(--border);
-    padding: 20px 14px;
-}
-
-.search {
-    width: 100%;
-    padding: 12px;
-    background: var(--bg);
-    color: var(--text);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    outline: none;
-    margin-bottom: 18px;
-}
-
-.search:focus {
-    border-color: var(--accent);
-}
-
-.nav-heading {
-    color: var(--muted);
-    font-size: 11px;
-    font-weight: bold;
-    letter-spacing: 1.4px;
-    margin: 10px 8px;
-}
-
-.program-link {
-    display: block;
-    width: 100%;
-    text-align: left;
-    color: #c5c5d6;
-    background: transparent;
-    border: none;
-    border-radius: 6px;
-    padding: 12px 10px;
-    margin: 3px 0;
-    cursor: pointer;
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.program-link:hover,
-.program-link.active {
-    background: #292039;
-    color: #d8b4fe;
-}
-
-main {
-    flex: 1;
-    min-width: 0;
-    padding: 28px;
-}
-
-.welcome {
-    padding: 22px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    margin-bottom: 22px;
-}
-
-.welcome h2 {
-    margin: 0 0 10px;
-}
-
-.welcome p {
-    color: var(--muted);
-    line-height: 1.7;
-    margin-bottom: 0;
-}
-
-.notice {
-    border-left: 3px solid var(--accent);
-    background: #171321;
-    padding: 13px 15px;
-    color: #d6c5eb;
-    font-size: 13px;
-    line-height: 1.7;
-    margin-top: 15px;
-    border-radius: 0 7px 7px 0;
-}
-
-.program {
-    display: none;
-}
-
-.program.active {
-    display: block;
-}
-
-.program h2 {
-    font-size: 23px;
-    margin: 0 0 8px;
-}
-
-.description {
-    color: var(--muted);
-    margin-bottom: 22px;
-    line-height: 1.6;
-}
-
-.section-title {
-    font-size: 14px;
-    margin: 22px 0 10px;
-    color: #d8b4fe;
-}
-
-.code-container {
-    background: #101019;
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    overflow: hidden;
-}
-
-.code-toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 13px;
-    background: var(--panel2);
-    border-bottom: 1px solid var(--border);
-    font-size: 12px;
-    color: var(--muted);
-}
-
-pre {
-    margin: 0;
-    padding: 18px;
-    overflow-x: auto;
-    white-space: pre;
-    color: #d6d3e5;
-    font-size: 13px;
-    line-height: 1.7;
-}
-
-.output {
-    background: #101019;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 16px;
-    white-space: pre-wrap;
-    color: var(--green);
-    font-family: Consolas, monospace;
-    font-size: 13px;
-    line-height: 1.7;
-}
-
-.actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 9px;
-    margin: 18px 0;
-}
-
-button.action {
-    border: 1px solid var(--border);
-    color: var(--text);
-    background: var(--panel2);
-    padding: 10px 14px;
-    border-radius: 7px;
-    cursor: pointer;
-    font-size: 12px;
-}
-
-button.action:hover {
-    border-color: var(--accent);
-}
-
-button.primary {
-    background: var(--accent2);
-    border-color: var(--accent2);
-    color: white;
-}
-
-button.primary:hover {
-    background: var(--accent);
-}
-
-button:disabled {
-    opacity: .5;
-    cursor: not-allowed;
-}
-
-.status {
-    font-size: 12px;
-    color: var(--green);
-    margin-top: 10px;
-}
-
-.empty {
-    display: none;
-    padding: 15px 8px;
-    color: var(--muted);
-    font-size: 13px;
-}
-
-footer {
-    color: var(--muted);
-    text-align: center;
-    font-size: 12px;
-    padding: 24px;
-    border-top: 1px solid var(--border);
-}
-
-@media (max-width: 760px) {
-    .app {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-    }
-
-    main {
-        padding: 18px;
-    }
-
-    header {
-        padding: 18px;
-    }
-}
+*{box-sizing:border-box}
+body{margin:0;background:#0b0d12;color:#edf1f7;font:15px/1.6 Arial,sans-serif}
+.layout{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+aside{background:#10141d;padding:24px;border-right:1px solid #293244}
+main{padding:30px;max-width:1100px;width:100%}
+h1{margin-top:8px;font-size:34px}
+h2{font-size:20px}
+p,.muted{color:#aab5c6}
+button{background:#8b5cf6;color:white;border:0;padding:10px 14px;
+border-radius:7px;cursor:pointer;font-weight:bold;margin:4px 4px 4px 0}
+button.secondary{background:#202736;border:1px solid #394357}
+input[type=search]{width:100%;padding:10px;background:#191f2b;
+color:white;border:1px solid #394357;border-radius:7px;margin:15px 0}
+.nav button{display:block;width:100%;text-align:left;background:transparent;color:#cbd5e1}
+.practical{padding:22px 5px;border-bottom:1px solid #293244}
+pre{white-space:pre;overflow:auto;max-height:320px;background:#07090e;
+border:1px solid #293244;padding:14px;border-radius:7px;color:#dbeafe}
+summary{cursor:pointer;color:#c4b5fd;font-weight:bold}
+.notice{background:#211b12;border:1px solid #70572c;padding:14px;border-radius:8px}
+#status{color:#36d399;font-size:13px}
+@media(max-width:700px){.layout{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid #293244}main{padding:18px}}
 </style>
 </head>
-
 <body>
-
-<header>
-    <h1>PHP Practical Programs</h1>
-    <p>Programming Practicals · Source Code · Sample Output</p>
-</header>
-
-<div class="app">
-
-    <aside class="sidebar">
-        <input
-            type="search"
-            id="searchInput"
-            class="search"
-            placeholder="Search practicals..."
-            aria-label="Search practicals"
-        >
-
-        <div class="nav-heading">PROGRAMS</div>
-
-        <nav id="programList">
-            <button class="program-link active" data-target="p1">
-                01. Greeting Program
-            </button>
-            <button class="program-link" data-target="p2">
-                02. Palindrome Checker
-            </button>
-            <button class="program-link" data-target="p3">
-                03. Program Using Function
-            </button>
-            <button class="program-link" data-target="p4">
-                04. Array Manipulation
-            </button>
-            <button class="program-link" data-target="p5">
-                05. Personal Information
-            </button>
-            <button class="program-link" data-target="p6">
-                06. Advertisement
-            </button>
-        </nav>
-
-        <div class="empty" id="emptyMessage">
-            No matching practicals found.
-        </div>
-    </aside>
-
-    <main>
-
-        <section class="welcome">
-            <h2>PHP Practical Programs</h2>
-            <p>
-                Select a practical from the list to view its PHP source code,
-                sample output, and individual download options.
-            </p>
-
-            <div class="notice">
-                <strong>Important:</strong> Save PHP files inside
-                <code>C:\xampp\htdocs\</code> to run them using XAMPP.
-                Start Apache and access the file through
-                <code>http://localhost/filename.php</code>.
-                Opening a PHP file directly from your computer will not execute PHP.
-            </div>
-        </section>
-
-        <!-- PROGRAM 1 -->
-        <section class="program active" id="p1"
-            data-title="Greeting Program">
-
-            <h2>01. Greeting Program</h2>
-            <p class="description">
-                Accepts a user's name through an HTML form and displays
-                a personalized greeting.
-            </p>
-
-            <div class="section-title">Source Code</div>
-
-            <div class="code-container">
-                <div class="code-toolbar">
-                    <span>Greeting.php</span>
-                    <button class="action" onclick="copyCode('code1')">
-                        Copy Code
-                    </button>
-                </div>
-                <pre><code id="code1">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;Greeting Program&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h2&gt;Greeting Program&lt;/h2&gt;
-
-    &lt;form method="post"&gt;
-        Enter your name:
-        &lt;input type="text" name="name" required&gt;
-        &lt;button type="submit"&gt;Submit&lt;/button&gt;
-    &lt;/form&gt;
-
-    &lt;?php
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        $name = htmlspecialchars($_POST["name"]);
-        echo "Hello, " . $name . "! Welcome!";
-    }
-    ?&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-            </div>
-
-            <div class="section-title">Sample Output</div>
-            <div class="output" id="output1">Enter your name: Rifqah
-
-Hello, Rifqah! Welcome!</div>
-
-            <div class="actions">
-                <button class="action primary" onclick="downloadPHP(1)">
-                    Download Greeting.php
-                </button>
-                <button class="action" onclick="copyOutput(1)">
-                    Copy Output
-                </button>
-            </div>
-        </section>
-
-        <!-- PROGRAM 2 -->
-        <section class="program" id="p2"
-            data-title="Palindrome Checker">
-
-            <h2>02. Palindrome Checker</h2>
-            <p class="description">
-                Checks whether the entered string reads the same forward
-                and backward.
-            </p>
-
-            <div class="section-title">Source Code</div>
-
-            <div class="code-container">
-                <div class="code-toolbar">
-                    <span>Palindrome.php</span>
-                    <button class="action" onclick="copyCode('code2')">
-                        Copy Code
-                    </button>
-                </div>
-                <pre><code id="code2">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;Palindrome Checker&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h2&gt;Palindrome Checker&lt;/h2&gt;
-
-    &lt;form method="post"&gt;
-        Enter a string:
-        &lt;input type="text" name="word" required&gt;
-        &lt;button type="submit"&gt;Check&lt;/button&gt;
-    &lt;/form&gt;
-
-    &lt;?php
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        $word = $_POST["word"];
-        $cleanWord = strtolower(trim($word));
-        $reversed = strrev($cleanWord);
-
-        if ($cleanWord === $reversed) {
-            echo htmlspecialchars($word) .
-                " is a palindrome.";
-        } else {
-            echo htmlspecialchars($word) .
-                " is not a palindrome.";
-        }
-    }
-    ?&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-            </div>
-
-            <div class="section-title">Sample Output</div>
-            <div class="output" id="output2">Enter a string: madam
-
-madam is a palindrome.</div>
-
-            <div class="actions">
-                <button class="action primary" onclick="downloadPHP(2)">
-                    Download Palindrome.php
-                </button>
-                <button class="action" onclick="copyOutput(2)">
-                    Copy Output
-                </button>
-            </div>
-        </section>
-
-        <!-- PROGRAM 3 -->
-        <section class="program" id="p3"
-            data-title="Program Using Function">
-
-            <h2>03. Program Using Function</h2>
-            <p class="description">
-                Demonstrates how to define and call a PHP function
-                to display a greeting.
-            </p>
-
-            <div class="section-title">Source Code</div>
-
-            <div class="code-container">
-                <div class="code-toolbar">
-                    <span>Function.php</span>
-                    <button class="action" onclick="copyCode('code3')">
-                        Copy Code
-                    </button>
-                </div>
-                <pre><code id="code3">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;PHP Function&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h2&gt;Greeting Using Function&lt;/h2&gt;
-
-    &lt;form method="post"&gt;
-        Enter your name:
-        &lt;input type="text" name="name" required&gt;
-        &lt;button type="submit"&gt;Submit&lt;/button&gt;
-    &lt;/form&gt;
-
-    &lt;?php
-    function greet($name) {
-        echo "Hello, " . htmlspecialchars($name) . "!";
-    }
-
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        greet($_POST["name"]);
-    }
-    ?&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-            </div>
-
-            <div class="section-title">Sample Output</div>
-            <div class="output" id="output3">Enter your name: Rifqah
-
-Hello, Rifqah!</div>
-
-            <div class="actions">
-                <button class="action primary" onclick="downloadPHP(3)">
-                    Download Function.php
-                </button>
-                <button class="action" onclick="copyOutput(3)">
-                    Copy Output
-                </button>
-            </div>
-        </section>
-
-        <!-- PROGRAM 4 -->
-        <section class="program" id="p4"
-            data-title="Array Manipulation">
-
-            <h2>04. Array Manipulation</h2>
-            <p class="description">
-                Creates an array of fruit names and displays each item
-                using a foreach loop.
-            </p>
-
-            <div class="section-title">Source Code</div>
-
-            <div class="code-container">
-                <div class="code-toolbar">
-                    <span>ArrayManipulation.php</span>
-                    <button class="action" onclick="copyCode('code4')">
-                        Copy Code
-                    </button>
-                </div>
-                <pre><code id="code4">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;Array Manipulation&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h2&gt;Array of Fruits&lt;/h2&gt;
-
-    &lt;?php
-    $fruits = array("Apple", "Mango", "Orange");
-
-    foreach ($fruits as $fruit) {
-        echo htmlspecialchars($fruit) . "&lt;br&gt;";
-    }
-    ?&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-            </div>
-
-            <div class="section-title">Sample Output</div>
-            <div class="output" id="output4">Apple
-Mango
-Orange</div>
-
-            <div class="actions">
-                <button class="action primary" onclick="downloadPHP(4)">
-                    Download ArrayManipulation.php
-                </button>
-                <button class="action" onclick="copyOutput(4)">
-                    Copy Output
-                </button>
-            </div>
-        </section>
-
-        <!-- PROGRAM 5 -->
-        <section class="program" id="p5"
-            data-title="Personal Information">
-
-            <h2>05. Personal Information</h2>
-            <p class="description">
-                Collects a person's name, age, and email address
-                and displays the submitted details.
-            </p>
-
-            <div class="section-title">Source Code</div>
-
-            <div class="code-container">
-                <div class="code-toolbar">
-                    <span>PersonalInformation.php</span>
-                    <button class="action" onclick="copyCode('code5')">
-                        Copy Code
-                    </button>
-                </div>
-                <pre><code id="code5">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;Personal Information&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h2&gt;Personal Information Form&lt;/h2&gt;
-
-    &lt;form method="post"&gt;
-        Name:
-        &lt;input type="text" name="name" required&gt;
-        &lt;br&gt;&lt;br&gt;
-
-        Age:
-        &lt;input type="number" name="age" min="1" required&gt;
-        &lt;br&gt;&lt;br&gt;
-
-        Email:
-        &lt;input type="email" name="email" required&gt;
-        &lt;br&gt;&lt;br&gt;
-
-        &lt;button type="submit"&gt;Submit&lt;/button&gt;
-    &lt;/form&gt;
-
-    &lt;?php
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        $name = htmlspecialchars($_POST["name"]);
-        $age = htmlspecialchars($_POST["age"]);
-        $email = htmlspecialchars($_POST["email"]);
-
-        echo "&lt;h3&gt;Submitted Information&lt;/h3&gt;";
-        echo "Name: " . $name . "&lt;br&gt;";
-        echo "Age: " . $age . "&lt;br&gt;";
-        echo "Email: " . $email;
-    }
-    ?&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-            </div>
-
-            <div class="section-title">Sample Output</div>
-            <div class="output" id="output5">Name: Rifqah
-Age: 19
-Email: rifqah@example.com</div>
-
-            <div class="actions">
-                <button class="action primary" onclick="downloadPHP(5)">
-                    Download PersonalInformation.php
-                </button>
-                <button class="action" onclick="copyOutput(5)">
-                    Copy Output
-                </button>
-            </div>
-        </section>
-
-        <!-- PROGRAM 6 -->
-        <section class="program" id="p6"
-            data-title="Advertisement">
-
-            <h2>06. Advertisement</h2>
-            <p class="description">
-                Displays a product advertisement with an image, audio,
-                promotional text, and a PHP thank-you message.
-            </p>
-
-            <div class="section-title">Source Code</div>
-
-            <div class="code-container">
-                <div class="code-toolbar">
-                    <span>Advertisement.php</span>
-                    <button class="action" onclick="copyCode('code6')">
-                        Copy Code
-                    </button>
-                </div>
-                <pre><code id="code6">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;Product Advertisement&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h1&gt;Special Product Offer!&lt;/h1&gt;
-
-    &lt;img src="product.jpg"
-         alt="Product Image"
-         width="250"&gt;
-
-    &lt;h2&gt;Discover Our Amazing Product&lt;/h2&gt;
-    &lt;p&gt;
-        Get yours today and enjoy this special offer!
-    &lt;/p&gt;
-
-    &lt;audio controls&gt;
-        &lt;source src="music.mp3" type="audio/mpeg"&gt;
-        Your browser does not support audio.
-    &lt;/audio&gt;
-
-    &lt;?php
-    echo "&lt;p&gt;Thank you for visiting our advertisement!&lt;/p&gt;";
-    ?&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-            </div>
-
-            <div class="section-title">Sample Output</div>
-            <div class="output" id="output6">Special Product Offer!
-
-[Product image]
-
-Discover Our Amazing Product
-
-Get yours today and enjoy this special offer!
-
-[Audio player]
-
-Thank you for visiting our advertisement!</div>
-
-            <div class="notice">
-                Keep <strong>product.jpg</strong> and
-                <strong>music.mp3</strong> in the same folder as
-                Advertisement.php.
-            </div>
-
-            <div class="actions">
-                <button class="action primary" onclick="downloadPHP(6)">
-                    Download Advertisement.php
-                </button>
-                <button class="action" onclick="copyOutput(6)">
-                    Copy Output
-                </button>
-            </div>
-        </section>
-
-        <div id="statusMessage" class="status" role="status"></div>
-
-    </main>
+<div class="layout">
+<aside>
+<h2>PHP Practicals</h2>
+<p class="muted">Programs · Source Code · Downloads</p>
+<input id="search" type="search" placeholder="Search practicals...">
+<div class="nav" id="nav"></div>
+</aside>
+
+<main>
+<p style="color:#c4b5fd">PRACTICAL LAB · PHP</p>
+<h1>PHP Practical Programs</h1>
+<p class="muted">Copy the source code or download each PHP practical separately.</p>
+
+<div class="notice">
+<strong>Save directly to XAMPP:</strong>
+<p>Select your actual <code>C:\xampp\htdocs</code> folder once. Keep this page open while downloading. This feature works in supported versions of Chrome and Edge.</p>
+<button id="choose">Choose htdocs Folder Once</button>
+<span id="status">No folder selected</span>
 </div>
 
-<footer>
-    PHP Practical Programs · Run PHP files using XAMPP Apache
-</footer>
+<div id="programs"></div>
+<p class="muted">Start Apache in XAMPP before running PHP files through localhost.</p>
+</main>
+</div>
 
 <script>
-const fileNames = {
-    1: "Greeting.php",
-    2: "Palindrome.php",
-    3: "Function.php",
-    4: "ArrayManipulation.php",
-    5: "PersonalInformation.php",
-    6: "Advertisement.php"
-};
+const items = [
+{
+title:"Greeting Program",
+file:"Greeting.php",
+code:`<!DOCTYPE html>
+<html>
+<body>
+<form method="post">
+<label>Enter your name:
+<input type="text" name="name" required>
+</label>
+<button type="submit">Submit</button>
+</form>
 
-function showStatus(message, isError = false) {
-    const status = document.getElementById("statusMessage");
-    status.textContent = message;
-    status.style.color = isError ? "var(--red)" : "var(--green)";
+<?php
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $name = htmlspecialchars($_POST["name"], ENT_QUOTES, "UTF-8");
+    echo "Hello, $name! Welcome!";
 }
+?>
+</body>
+</html>`
+},
+{
+title:"Palindrome Checker",
+file:"Palindrome.php",
+code:`<!DOCTYPE html>
+<html>
+<body>
+<form method="post">
+<label>Enter a word:
+<input type="text" name="word" required>
+</label>
+<button type="submit">Check</button>
+</form>
 
-function showProgram(id) {
-    document.querySelectorAll(".program").forEach(program => {
-        program.classList.toggle("active", program.id === id);
-    });
-
-    document.querySelectorAll(".program-link").forEach(link => {
-        link.classList.toggle("active", link.dataset.target === id);
-    });
-
-    showStatus("");
-}
-
-document.querySelectorAll(".program-link").forEach(link => {
-    link.addEventListener("click", () => {
-        showProgram(link.dataset.target);
-    });
-});
-
-document.getElementById("searchInput").addEventListener("input", function () {
-    const query = this.value.toLowerCase().trim();
-    let firstVisible = null;
-    let count = 0;
-
-    document.querySelectorAll(".program-link").forEach(link => {
-        const program = document.getElementById(link.dataset.target);
-        const matches = (
-            link.textContent + " " + program.textContent
-        ).toLowerCase().includes(query);
-
-        link.style.display = matches ? "block" : "none";
-
-        if (matches) {
-            count++;
-            if (!firstVisible) firstVisible = link;
-        }
-    });
-
-    document.getElementById("emptyMessage").style.display =
-        count === 0 ? "block" : "none";
-
-    if (firstVisible) {
-        showProgram(firstVisible.dataset.target);
-    } else {
-        document.querySelectorAll(".program").forEach(program => {
-            program.classList.remove("active");
-        });
-    }
-});
-
-async function copyText(text) {
-    try {
-        await navigator.clipboard.writeText(text);
-        showStatus("Copied successfully.");
-    } catch (error) {
-        const textarea = document.createElement("textarea");
-        textarea.value = text;
-        document.body.appendChild(textarea);
-        textarea.select();
-
-        const success = document.execCommand("copy");
-        textarea.remove();
-
-        showStatus(
-            success ? "Copied successfully." : "Unable to copy. Please copy manually.",
-            !success
-        );
-    }
-}
-
-function copyCode(id) {
-    const code = document.getElementById(id);
-    copyText(code.textContent);
-}
-
-function copyOutput(number) {
-    copyText(document.getElementById("output" + number).textContent);
-}
-
-function getPHPSource(number) {
-    const code = document.getElementById("code" + number);
-    return code.textContent;
-}
-
-async function downloadPHP(number) {
-    const filename = fileNames[number];
-    const source = getPHPSource(number);
-
-    // If the user has previously granted access to a folder,
-    // attempt to save directly into that selected folder.
-    if (window.savedPHPDirectoryHandle) {
-        try {
-            const fileHandle =
-                await window.savedPHPDirectoryHandle.getFileHandle(
-                    filename,
-                    { create: true }
-                );
-
-            const writable = await fileHandle.createWritable();
-            await writable.write(source);
-            await writable.close();
-
-            showStatus("Saved " + filename + " to the selected folder.");
-            return;
-        } catch (error) {
-            showStatus(
-                "Could not save directly. Download the file and move it into C:\\xampp\\htdocs\\.",
-                true
-            );
-        }
-    }
-
-    // Standard browser download fallback.
-    const blob = new Blob([source], {
-        type: "application/x-httpd-php;charset=utf-8"
-    });
-
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-
-    anchor.href = url;
-    anchor.download = filename;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
-
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-
-    showStatus(
-        "Downloaded " + filename +
-        ". Move it into C:\\xampp\\htdocs\\ to run with XAMPP."
+<?php
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $word = trim($_POST["word"]);
+    $clean = strtolower(
+        preg_replace("/[^a-z0-9]/i", "", $word)
     );
+
+    if ($clean !== "" && $clean === strrev($clean)) {
+        echo htmlspecialchars($word) . " is a palindrome.";
+    } else {
+        echo htmlspecialchars($word) . " is not a palindrome.";
+    }
+}
+?>
+</body>
+</html>`
+},
+{
+title:"Program Using Function",
+file:"Function.php",
+code:`<!DOCTYPE html>
+<html>
+<body>
+<form method="post">
+<label>Enter your name:
+<input type="text" name="name" required>
+</label>
+<button type="submit">Greet</button>
+</form>
+
+<?php
+function greet($name) {
+    $name = htmlspecialchars($name, ENT_QUOTES, "UTF-8");
+    echo "Hello, " . $name . "!";
 }
 
-// Add a folder-selection option without adding another box or
-// a Download All button. Use the existing individual download workflow.
-const folderButton = document.createElement("button");
-folderButton.className = "action";
-folderButton.textContent = "Choose htdocs Folder";
-folderButton.type = "button";
-folderButton.addEventListener("click", async () => {
-    if (!("showDirectoryPicker" in window)) {
-        showStatus(
-            "Folder access is not supported in this browser. Download each PHP file and move it into C:\\xampp\\htdocs\\.",
-            true
-        );
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    greet($_POST["name"]);
+}
+?>
+</body>
+</html>`
+},
+{
+title:"Array Manipulation",
+file:"ArrayManipulation.php",
+code:`<!DOCTYPE html>
+<html>
+<body>
+<?php
+$fruits = array("Apple", "Mango", "Orange");
+
+echo "<h2>Fruit List</h2>";
+echo "<ul>";
+
+foreach ($fruits as $fruit) {
+    echo "<li>" . htmlspecialchars($fruit) . "</li>";
+}
+
+echo "</ul>";
+?>
+</body>
+</html>`
+},
+{
+title:"Personal Information Form",
+file:"PersonalInformation.php",
+code:`<!DOCTYPE html>
+<html>
+<body>
+<form method="post">
+<label>Name:
+<input type="text" name="name" required>
+</label><br><br>
+
+<label>Age:
+<input type="number" name="age" min="1" required>
+</label><br><br>
+
+<label>Email:
+<input type="email" name="email" required>
+</label><br><br>
+
+<button type="submit">Submit</button>
+</form>
+
+<?php
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $name = htmlspecialchars($_POST["name"], ENT_QUOTES, "UTF-8");
+    $age = (int) $_POST["age"];
+    $email = htmlspecialchars($_POST["email"], ENT_QUOTES, "UTF-8");
+
+    echo "<h2>Personal Information</h2>";
+    echo "Name: $name<br>";
+    echo "Age: $age<br>";
+    echo "Email: $email";
+}
+?>
+</body>
+</html>`
+},
+{
+title:"Advertisement",
+file:"Advertisement.php",
+code:`<!DOCTYPE html>
+<html>
+<head>
+<title>Product Advertisement</title>
+</head>
+<body>
+<h1>Discover Our Amazing Product!</h1>
+
+<img src="product.jpg" alt="Product image" width="300">
+
+<p>Quality you can trust. Great value for everyone!</p>
+
+<audio controls>
+    <source src="music.mp3" type="audio/mpeg">
+    Your browser does not support audio.
+</audio>
+
+<?php
+echo "<p>Thank you for visiting our advertisement!</p>";
+?>
+</body>
+</html>`
+}
+];
+
+let directory = null;
+const $ = id => document.getElementById(id);
+
+function escapeHTML(text){
+    return text.replace(/[&<>"']/g, c => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",
+        '"':"&quot;","'":"&#39;"
+    }[c]));
+}
+
+function render(filter=""){
+    const found = items.filter(p =>
+        (p.title + p.file).toLowerCase().includes(filter.toLowerCase())
+    );
+
+    $("nav").innerHTML = found.map((p,i) =>
+        `<button onclick="document.getElementById('p${items.indexOf(p)}').scrollIntoView({behavior:'smooth'})">${p.title}</button>`
+    ).join("");
+
+    $("programs").innerHTML = found.map(p => {
+        const i = items.indexOf(p);
+        return `
+        <section class="practical" id="p${i}">
+          <h2>${i+1}. ${p.title}</h2>
+          <p class="muted">${p.file}</p>
+          <button class="secondary" onclick="copyCode(${i})">Copy Code</button>
+          <button onclick="downloadProgram(${i})">Download ${p.file}</button>
+          <details>
+            <summary>View Source Code</summary>
+            <pre>${escapeHTML(p.code)}</pre>
+          </details>
+        </section>`;
+    }).join("");
+}
+
+async function copyCode(i){
+    try{
+        await navigator.clipboard.writeText(items[i].code);
+        alert("Code copied!");
+    }catch(e){
+        alert("Clipboard unavailable. Open this page in Chrome or Edge.");
+    }
+}
+
+async function writeFile(folder, filename, content, type="text/plain"){
+    const handle = await folder.getFileHandle(filename,{create:true});
+    const writable = await handle.createWritable();
+    await writable.write(new Blob([content],{type}));
+    await writable.close();
+}
+
+function normalDownload(filename, content, type="text/plain"){
+    const blob = new Blob([content],{type});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
+
+$("choose").addEventListener("click", async()=>{
+    if(!window.showDirectoryPicker){
+        alert("Use a supported version of Chrome or Edge to select a folder. You can still download files normally.");
         return;
     }
 
-    try {
-        const directory = await window.showDirectoryPicker({
-            mode: "readwrite"
-        });
+    try{
+        const folder = await window.showDirectoryPicker({mode:"readwrite"});
 
-        // Browsers do not expose the full local path of a chosen folder.
-        // Check the directory name and ask the user to confirm its path.
-        if (directory.name.toLowerCase() !== "htdocs") {
-            showStatus(
-                "Wrong folder selected. Please select C:\\xampp\\htdocs\\.",
-                true
-            );
+        if(folder.name.toLowerCase() !== "htdocs"){
+            alert("Please select the actual C:\\xampp\\htdocs folder.");
             return;
         }
 
-        const confirmed = window.confirm(
-            "You selected a folder named htdocs. Confirm that its full path is C:\\xampp\\htdocs\\ before saving PHP files."
-        );
-
-        if (!confirmed) {
-            showStatus("Folder selection cancelled.");
+        if(!confirm("Confirm this is C:\\xampp\\htdocs. Downloads will be saved in the selected folder.")){
             return;
         }
 
-        window.savedPHPDirectoryHandle = directory;
-        showStatus(
-            "Folder selected. Use each practical's Download button to save it there."
-        );
-    } catch (error) {
-        if (error.name !== "AbortError") {
-            showStatus("Could not access the selected folder.", true);
-        }
+        directory = folder;
+        $("status").textContent = " — htdocs selected";
+        alert("Folder selected! Keep this page open while downloading.");
+    }catch(e){
+        if(e.name !== "AbortError") alert("Could not select the folder.");
     }
 });
 
-document.querySelector("main").insertBefore(
-    folderButton,
-    document.getElementById("statusMessage")
-);
-</script>
+async function downloadProgram(i){
+    const p = items[i];
 
+    try{
+        if(directory){
+            await writeFile(directory,p.file,p.code,"text/plain");
+
+            if(p.title === "Advertisement"){
+                /*
+                  This generates a sample product image.
+                  The image is saved as a JPEG file.
+                */
+                const canvas = document.createElement("canvas");
+                canvas.width = 600;
+                canvas.height = 400;
+                const ctx = canvas.getContext("2d");
+
+                const gradient = ctx.createLinearGradient(0,0,600,400);
+                gradient.addColorStop(0,"#241447");
+                gradient.addColorStop(1,"#8b5cf6");
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0,0,600,400);
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "bold 38px Arial";
+                ctx.fillText("OUR PRODUCT",150,180);
+                ctx.font = "22px Arial";
+                ctx.fillText("Quality you can trust",155,225);
+
+                const imageBlob = await new Promise(resolve =>
+                    canvas.toBlob(resolve,"image/jpeg",0.9)
+                );
+
+                await writeFile(directory,"product.jpg",imageBlob,"image/jpeg");
+
+                /*
+                  Creates a short sample audio file.
+                  It is WAV audio, so it is saved with the correct
+                  .wav extension rather than falsely naming it MP3.
+                */
+                const sampleRate = 8000;
+                const seconds = 1;
+                const samples = sampleRate * seconds;
+                const buffer = new ArrayBuffer(44 + samples);
+                const view = new DataView(buffer);
+
+                function writeString(offset,str){
+                    for(let n=0;n<str.length;n++){
+                        view.setUint8(offset+n,str.charCodeAt(n));
+                    }
+                }
+
+                writeString(0,"RIFF");
+                view.setUint32(4,36+samples,true);
+                writeString(8,"WAVE");
+                writeString(12,"fmt ");
+                view.setUint32(16,16,true);
+                view.setUint16(20,1,true);
+                view.setUint16(22,1,true);
+                view.setUint32(24,sampleRate,true);
+                view.setUint32(28,sampleRate,true);
+                view.setUint16(32,1,true);
+                view.setUint16(34,8,true);
+                writeString(36,"data");
+                view.setUint32(40,samples,true);
+
+                for(let n=0;n<samples;n++){
+                    view.setUint8(44+n,128+Math.round(
+                        25*Math.sin(2*Math.PI*440*n/sampleRate)
+                    ));
+                }
+
+                await writeFile(directory,"music.wav",buffer,"audio/wav");
+                alert("Saved Advertisement.php, product.jpg and music.wav to htdocs.");
+            }else{
+                alert(p.file+" saved to htdocs.");
+            }
+        }else{
+            normalDownload(p.file,p.code,"text/plain");
+            alert("Downloaded "+p.file+". Move it into C:\\xampp\\htdocs.");
+
+            if(p.title === "Advertisement"){
+                alert("The advertisement also needs product.jpg and music.mp3. Select htdocs first to generate its sample assets automatically.");
+            }
+        }
+    }catch(e){
+        console.error(e);
+        alert("Could not save the file. Check folder permissions and select htdocs again.");
+    }
+}
+
+$("search").addEventListener("input",e=>render(e.target.value));
+render();
+</script>
 </body>
 </html>
