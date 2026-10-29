@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,32 +14,42 @@ header h1{margin:0;color:#c4b5fd}
 header p{color:#aab5c6}
 main{max-width:1050px;margin:auto;padding:25px}
 .toolbar{padding:18px 0;border-bottom:1px solid #293244}
-button{padding:10px 14px;margin:4px 5px 4px 0;border:0;border-radius:6px;
-background:#8b5cf6;color:white;font-weight:bold;cursor:pointer}
+button{padding:10px 14px;margin:4px 5px 4px 0;border:0;border-radius:6px;background:#8b5cf6;color:white;font-weight:bold;cursor:pointer}
 button.secondary{background:#202736;border:1px solid #394357}
 button:hover{opacity:.85}
 .status{display:block;margin:8px 0;color:#aab5c6;font-size:13px}
 .status.success{color:#34d399}
 .status.error{color:#fb7185}
 .status.loading{color:#fbbf24}
-.practical{padding:25px 0;border-bottom:1px solid #293244}
+.practical{padding:25px 0;border-bottom:1px solid #293244;scroll-margin-top:20px}
 h2{font-size:22px;color:#c4b5fd}
 h3{font-size:16px;color:#e2e8f0;margin-bottom:5px}
-pre{padding:16px;background:#07090e;border:1px solid #293244;
-border-radius:8px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;
-color:#dbeafe;font-size:13px}
+pre{padding:16px;background:#07090e;border:1px solid #293244;border-radius:8px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;color:#dbeafe;font-size:13px}
 details{margin-top:15px}
 summary{cursor:pointer;color:#c4b5fd;font-weight:bold;padding:8px 0}
 .output{padding:18px;background:#fff;color:#111;border-radius:7px;margin-top:8px}
 .output input{margin:5px 0;padding:6px;max-width:100%}
 .output button{background:#2563eb}
-.output img{max-width:300px;width:100%}
+.output img{max-width:100%;width:300px;display:block;border-radius:5px}
 .output audio{max-width:100%}
 .output .result{margin-top:12px;color:#111}
 .note{color:#aab5c6;font-size:13px}
-@media(max-width:600px){main{padding:15px}header{padding:20px}}
+
+.quick-nav{padding:16px 0;border-bottom:1px solid #293244}
+.quick-nav strong{display:block;color:#c4b5fd;margin-bottom:8px}
+.quick-nav a{display:inline-block;text-decoration:none;color:#e2e8f0;background:#202736;border:1px solid #394357;border-radius:6px;padding:7px 10px;margin:4px 5px 4px 0}
+.quick-nav a:hover{background:#8b5cf6;color:white}
+.ad-choice{background:#202736!important;border:1px solid #394357!important}
+.ad-choice.active{background:#8b5cf6!important}
+
+@media(max-width:600px){
+main{padding:15px}
+header{padding:20px}
+.quick-nav a{font-size:13px}
+}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -47,17 +58,24 @@ summary{cursor:pointer;color:#c4b5fd;font-weight:bold;padding:8px 0}
 </header>
 
 <main>
+
 <div class="toolbar">
 <button id="chooseFolder">Choose htdocs Folder Once</button>
 <span id="folderStatus" class="status">No folder selected.</span>
 <p class="note">Select your XAMPP htdocs folder once. Keep this page open while downloading.</p>
 </div>
 
+<nav class="quick-nav" aria-label="Quick navigation">
+<strong>Quick Navigation</strong>
+<div id="quickLinks"></div>
+</nav>
+
 <div id="programs"></div>
 </main>
 
 <script>
 const programs = [
+
 {
 title:"1. Greeting",
 aim:"To write a php program to Get the name of the user from a form and show “greeting text”.",
@@ -84,6 +102,7 @@ Enter your name:
 <input type="submit" value="Submit">
 </form><div class="result"></div>`
 },
+
 {
 title:"2. Palindrome",
 aim:"To Write a PHP program to check whether the given string is a palindrome or not.",
@@ -115,6 +134,7 @@ Enter a string:
 <input type="submit" value="Check">
 </form><div class="result"></div>`
 },
+
 {
 title:"3. Program using function",
 aim:"To Write a PHP program using function.",
@@ -143,6 +163,7 @@ Enter your name:
 <input type="submit" value="Submit">
 </form><div class="result"></div>`
 },
+
 {
 title:"4. Array Manipulation",
 aim:"Write a PHP program for array manipulation.",
@@ -156,6 +177,7 @@ foreach ($fruits as $fruit) {
 ?>`,
 output:`<div>Fruits:<br>Apple<br>Mango<br>Orange</div>`
 },
+
 {
 title:"5. Personal Information",
 aim:"Write a PHP program to design Personal Information.",
@@ -183,8 +205,7 @@ if (isset($_POST['name'])) {
 ?>
 </body>
 </html>`,
-output:`<h3>Personal Information</h3>
-<form onsubmit="event.preventDefault();let f=this;let r=this.nextElementSibling;r.innerHTML='<h3>Personal Information</h3>Name: '+esc(f.elements.name.value)+'<br>Age: '+esc(f.elements.age.value)+'<br>Email: '+esc(f.elements.email.value)">
+output:`<form onsubmit="event.preventDefault();let f=this;let r=this.nextElementSibling;r.innerHTML='<h3>Personal Information</h3>Name: '+esc(f.elements.name.value)+'<br>Age: '+esc(f.elements.age.value)+'<br>Email: '+esc(f.elements.email.value)">
 Name:
 <input type="text" name="name"><br><br>
 Age:
@@ -194,6 +215,7 @@ Email:
 <input type="submit" value="Submit">
 </form><div class="result"></div>`
 },
+
 {
 title:"6. Advertisement",
 aim:"Create a web page to advertise product of the company using images and audio.",
@@ -213,16 +235,20 @@ echo "Thank you for visiting this page";
 </body>
 </html>`,
 output:`<h1>Our Product</h1>
-<img id="sampleProduct" alt="Product image" width="300">
+<button type="button" class="ad-choice active" onclick="selectAdImage('bottle')">Bottle Advertisement</button>
+<button type="button" class="ad-choice" onclick="selectAdImage('cake')">Aesthetic Cake Advertisement</button>
+<br><br>
+<img id="sampleProduct" alt="Product advertisement image" width="300">
 <h2>New Product Available!</h2>
 <p>Buy our product today at the best price.</p>
 <audio id="sampleAudio" controls></audio>
 <p>Thank you for visiting this page</p>
-<p class="note">The downloaded PHP program uses product.jpg and music.wav from the same folder.</p>`
+<p class="note">The downloaded PHP program uses product.jpg and music.wav from the same folder. The selected bottle or cake design is saved as product.jpg.</p>`
 }
 ];
 
 let folderHandle = null;
+let selectedAdStyle = "bottle";
 const $ = id => document.getElementById(id);
 
 function esc(s){
@@ -255,32 +281,237 @@ function render(){
       </details>
     </section>`).join("");
 
+    $("quickLinks").innerHTML = programs.map((p,i)=>
+        `<a href="#program${i}">${p.title}</a>`
+    ).join("");
+
     setupAdvertisementSample();
 }
 
-function setupAdvertisementSample(){
+function drawProductCanvas(style){
     const canvas=document.createElement("canvas");
-    canvas.width=600;canvas.height=400;
+    canvas.width=900;
+    canvas.height=600;
     const c=canvas.getContext("2d");
-    const g=c.createLinearGradient(0,0,600,400);
-    g.addColorStop(0,"#312e81");
-    g.addColorStop(1,"#a855f7");
-    c.fillStyle=g;c.fillRect(0,0,600,400);
-    c.fillStyle="#fff";c.font="bold 48px Arial";
-    c.fillText("OUR PRODUCT",105,180);
-    c.font="25px Arial";c.fillText("New Product Available!",105,235);
 
-    $("sampleProduct").src=canvas.toDataURL("image/jpeg");
+    // Premium background
+    const bg=c.createLinearGradient(0,0,900,600);
+    bg.addColorStop(0,"#f8e9d2");
+    bg.addColorStop(0.55,"#ead1b1");
+    bg.addColorStop(1,"#b7a0a0");
+    c.fillStyle=bg;
+    c.fillRect(0,0,900,600);
 
-    const audio=document.getElementById("sampleAudio");
+    // Decorative background circles
+    c.globalAlpha=0.22;
+    c.fillStyle="#ffffff";
+    c.beginPath();
+    c.arc(735,110,115,0,Math.PI*2);
+    c.fill();
+    c.beginPath();
+    c.arc(150,500,145,0,Math.PI*2);
+    c.fill();
+    c.globalAlpha=1;
+
+    c.fillStyle="#46302b";
+    c.textAlign="left";
+    c.font="bold 27px Arial";
+    c.fillText("PREMIUM COLLECTION",55,78);
+
+    c.fillStyle="#70534a";
+    c.font="20px Arial";
+    c.fillText("Made to make your day special",55,113);
+
+    if(style==="cake"){
+        // Cake stand
+        c.fillStyle="#b68c72";
+        c.beginPath();
+        c.ellipse(590,475,205,28,0,0,Math.PI*2);
+        c.fill();
+
+        c.fillStyle="#f5e9dc";
+        c.beginPath();
+        c.ellipse(590,462,185,23,0,0,Math.PI*2);
+        c.fill();
+
+        // Cake body
+        c.fillStyle="#f4d7cf";
+        c.beginPath();
+        c.moveTo(445,300);
+        c.lineTo(735,300);
+        c.lineTo(715,430);
+        c.quadraticCurveTo(590,465,465,430);
+        c.closePath();
+        c.fill();
+
+        // Chocolate topping and cream
+        c.fillStyle="#7b463c";
+        c.beginPath();
+        c.ellipse(590,295,143,38,0,0,Math.PI*2);
+        c.fill();
+
+        c.fillStyle="#fff0e8";
+        c.beginPath();
+        c.ellipse(590,286,139,35,0,0,Math.PI*2);
+        c.fill();
+
+        // Strawberry decorations
+        [[535,275],[590,260],[642,276]].forEach((p,i)=>{
+            c.fillStyle=i===1?"#b83b4b":"#d94b5b";
+            c.beginPath();
+            c.ellipse(p[0],p[1],17,22,i===1?0.2:-0.2,0,Math.PI*2);
+            c.fill();
+
+            c.fillStyle="#52754b";
+            c.beginPath();
+            c.ellipse(p[0],p[1]-19,8,4,-0.5,0,Math.PI*2);
+            c.fill();
+        });
+
+        // Cake product label
+        c.fillStyle="#fffaf3";
+        c.fillRect(505,350,170,52);
+        c.strokeStyle="#c39a7d";
+        c.lineWidth=2;
+        c.strokeRect(505,350,170,52);
+
+        c.fillStyle="#69453b";
+        c.textAlign="center";
+        c.font="bold 22px Georgia";
+        c.fillText("SWEET MOMENT",590,373);
+        c.font="14px Arial";
+        c.fillText("ARTISAN CAKE",590,391);
+
+    }else{
+        // Bottle shadow
+        c.fillStyle="rgba(66,43,35,0.18)";
+        c.beginPath();
+        c.ellipse(600,500,125,22,0,0,Math.PI*2);
+        c.fill();
+
+        // Golden bottle cap
+        c.fillStyle="#b58b4a";
+        c.fillRect(548,160,104,46);
+        c.fillStyle="#e5c98c";
+        c.fillRect(558,166,84,8);
+
+        // Green glass bottle
+        const neck=c.createLinearGradient(540,0,660,0);
+        neck.addColorStop(0,"#3c554c");
+        neck.addColorStop(0.5,"#8ca99a");
+        neck.addColorStop(1,"#2e453e");
+
+        c.fillStyle=neck;
+        c.fillRect(540,200,120,55);
+
+        c.beginPath();
+        c.moveTo(540,245);
+        c.lineTo(515,275);
+        c.quadraticCurveTo(495,290,495,320);
+        c.lineTo(495,450);
+        c.quadraticCurveTo(495,480,525,480);
+        c.lineTo(675,480);
+        c.quadraticCurveTo(705,480,705,450);
+        c.lineTo(705,320);
+        c.quadraticCurveTo(705,290,685,275);
+        c.lineTo(660,245);
+        c.closePath();
+        c.fill();
+
+        // Glass reflection
+        c.fillStyle="rgba(255,255,255,0.22)";
+        c.beginPath();
+        c.moveTo(525,300);
+        c.quadraticCurveTo(520,280,540,270);
+        c.lineTo(550,270);
+        c.lineTo(550,450);
+        c.quadraticCurveTo(550,462,535,458);
+        c.closePath();
+        c.fill();
+
+        // Bottle label
+        c.fillStyle="#f5e6c9";
+        c.fillRect(515,335,170,100);
+        c.strokeStyle="#b58b4a";
+        c.lineWidth=3;
+        c.strokeRect(515,335,170,100);
+
+        c.fillStyle="#30463c";
+        c.textAlign="center";
+        c.font="bold 20px Georgia";
+        c.fillText("OUR PRODUCT",600,370);
+
+        c.strokeStyle="#b58b4a";
+        c.lineWidth=1;
+        c.beginPath();
+        c.moveTo(540,383);
+        c.lineTo(660,383);
+        c.stroke();
+
+        c.font="15px Arial";
+        c.fillText("PREMIUM BLEND",600,408);
+    }
+
+    // Advertisement slogan
+    c.textAlign="left";
+    c.fillStyle="#46302b";
+    c.font="bold 30px Georgia";
+    c.fillText(
+        style==="cake"?"A LITTLE SLICE OF JOY":"A TOUCH OF LUXURY",
+        55,505
+    );
+
+    c.font="18px Arial";
+    c.fillStyle="#70534a";
+    c.fillText("Discover something beautiful today",55,540);
+
+    return canvas;
+}
+
+function selectAdImage(style){
+    selectedAdStyle=style;
+
+    const canvas=drawProductCanvas(style);
+    const img=$("sampleProduct");
+
+    if(img){
+        img.src=canvas.toDataURL("image/jpeg",0.92);
+    }
+
+    document.querySelectorAll(".ad-choice").forEach(b=>{
+        b.classList.toggle(
+            "active",
+            b.textContent.toLowerCase().includes(
+                style==="cake"?"cake":"bottle"
+            )
+        );
+    });
+}
+
+function setupAdvertisementSample(){
+    selectAdImage(selectedAdStyle);
+
+    const audio=$("sampleAudio");
+
     if(audio){
         const wav=makeWav();
-        audio.src=URL.createObjectURL(new Blob([wav],{type:"audio/wav"}));
+        audio.src=URL.createObjectURL(
+            new Blob([wav],{type:"audio/wav"})
+        );
     }
+}
+
+async function productImageBlob(){
+    return await new Promise(resolve=>
+        drawProductCanvas(selectedAdStyle).toBlob(
+            resolve,"image/jpeg",0.92
+        )
+    );
 }
 
 async function copyCode(i){
     const status=$("status"+i);
+
     try{
         await navigator.clipboard.writeText(programs[i].code);
         status.className="status success";
@@ -300,8 +531,11 @@ function setStatus(i,message,type="loading"){
 function downloadNormally(filename,content,type="text/plain"){
     const url=URL.createObjectURL(new Blob([content],{type}));
     const a=document.createElement("a");
-    a.href=url;a.download=filename;
-    document.body.appendChild(a);a.click();a.remove();
+    a.href=url;
+    a.download=filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
     setTimeout(()=>URL.revokeObjectURL(url),2000);
 }
 
@@ -313,27 +547,37 @@ async function saveFile(filename,content,type="text/plain"){
 }
 
 function makeWav(){
-    const rate=8000, samples=rate;
+    const rate=8000,samples=rate;
     const buffer=new ArrayBuffer(44+samples);
     const v=new DataView(buffer);
 
     function str(offset,s){
-        for(let i=0;i<s.length;i++)v.setUint8(offset+i,s.charCodeAt(i));
+        for(let i=0;i<s.length;i++){
+            v.setUint8(offset+i,s.charCodeAt(i));
+        }
     }
 
-    str(0,"RIFF");v.setUint32(4,36+samples,true);
-    str(8,"WAVE");str(12,"fmt ");
-    v.setUint32(16,16,true);v.setUint16(20,1,true);
-    v.setUint16(22,1,true);v.setUint32(24,rate,true);
-    v.setUint32(28,rate,true);v.setUint16(32,1,true);
-    v.setUint16(34,8,true);str(36,"data");
+    str(0,"RIFF");
+    v.setUint32(4,36+samples,true);
+    str(8,"WAVE");
+    str(12,"fmt ");
+    v.setUint32(16,16,true);
+    v.setUint16(20,1,true);
+    v.setUint16(22,1,true);
+    v.setUint32(24,rate,true);
+    v.setUint32(28,rate,true);
+    v.setUint16(32,1,true);
+    v.setUint16(34,8,true);
+    str(36,"data");
     v.setUint32(40,samples,true);
 
     for(let i=0;i<samples;i++){
-        v.setUint8(44+i,128+Math.round(
-            25*Math.sin(2*Math.PI*440*i/rate)
-        ));
+        v.setUint8(
+            44+i,
+            128+Math.round(25*Math.sin(2*Math.PI*440*i/rate))
+        );
     }
+
     return buffer;
 }
 
@@ -346,73 +590,75 @@ async function downloadProgram(i){
             await saveFile(p.file,p.code,"text/plain");
 
             if(i===5){
-                const canvas=document.createElement("canvas");
-                canvas.width=600;canvas.height=400;
-                const c=canvas.getContext("2d");
-                const g=c.createLinearGradient(0,0,600,400);
-                g.addColorStop(0,"#312e81");
-                g.addColorStop(1,"#a855f7");
-                c.fillStyle=g;c.fillRect(0,0,600,400);
-                c.fillStyle="#fff";c.font="bold 48px Arial";
-                c.fillText("OUR PRODUCT",105,180);
-                c.font="25px Arial";c.fillText("New Product Available!",105,235);
-
-                const imageBlob=await new Promise(resolve=>
-                    canvas.toBlob(resolve,"image/jpeg",0.9)
+                await saveFile(
+                    "product.jpg",
+                    await productImageBlob(),
+                    "image/jpeg"
                 );
 
-                await saveFile("product.jpg",imageBlob,"image/jpeg");
                 await saveFile("music.wav",makeWav(),"audio/wav");
 
-                setStatus(i,"Downloaded successfully: Advertisement.php, product.jpg and music.wav","success");
+                setStatus(
+                    i,
+                    "Downloaded successfully: Advertisement.php, product.jpg and music.wav",
+                    "success"
+                );
             }else{
                 setStatus(i,"Downloaded successfully: "+p.file,"success");
             }
+
         }else{
             downloadNormally(p.file,p.code,"text/plain");
 
             if(i===5){
-                const canvas=document.createElement("canvas");
-                canvas.width=600;canvas.height=400;
-                const c=canvas.getContext("2d");
-                const g=c.createLinearGradient(0,0,600,400);
-                g.addColorStop(0,"#312e81");
-                g.addColorStop(1,"#a855f7");
-                c.fillStyle=g;c.fillRect(0,0,600,400);
-                c.fillStyle="#fff";c.font="bold 48px Arial";
-                c.fillText("OUR PRODUCT",105,180);
-                c.font="25px Arial";c.fillText("New Product Available!",105,235);
-
-                const imageBlob=await new Promise(resolve=>
-                    canvas.toBlob(resolve,"image/jpeg",0.9)
+                downloadNormally(
+                    "product.jpg",
+                    await productImageBlob(),
+                    "image/jpeg"
                 );
 
-                downloadNormally("product.jpg",imageBlob,"image/jpeg");
                 downloadNormally("music.wav",makeWav(),"audio/wav");
 
-                setStatus(i,"Download started. Check browser Downloads for all 3 files.","success");
+                setStatus(
+                    i,
+                    "Download started. Check browser Downloads for all 3 files.",
+                    "success"
+                );
             }else{
-                setStatus(i,"Download started. Check your browser Downloads.","success");
+                setStatus(
+                    i,
+                    "Download started. Check your browser Downloads.",
+                    "success"
+                );
             }
         }
+
     }catch(e){
         console.error(e);
-        setStatus(i,"Download failed. Check folder permissions and try again.","error");
+        setStatus(
+            i,
+            "Download failed. Check folder permissions and try again.",
+            "error"
+        );
     }
 }
 
 $("chooseFolder").addEventListener("click",async()=>{
     if(!window.showDirectoryPicker){
-        $("folderStatus").textContent="Folder picker unavailable. Downloads will use your browser's Downloads folder.";
+        $("folderStatus").textContent=
+            "Folder picker unavailable. Downloads will use your browser's Downloads folder.";
         $("folderStatus").className="status error";
         return;
     }
 
     try{
-        const selected=await window.showDirectoryPicker({mode:"readwrite"});
+        const selected=await window.showDirectoryPicker({
+            mode:"readwrite"
+        });
 
         if(selected.name.toLowerCase()!=="htdocs"){
-            $("folderStatus").textContent="Please select the actual htdocs folder.";
+            $("folderStatus").textContent=
+                "Please select the actual htdocs folder.";
             $("folderStatus").className="status error";
             return;
         }
@@ -422,11 +668,14 @@ $("chooseFolder").addEventListener("click",async()=>{
         }
 
         folderHandle=selected;
-        $("folderStatus").textContent="htdocs folder selected. Ready to download.";
+        $("folderStatus").textContent=
+            "htdocs folder selected. Ready to download.";
         $("folderStatus").className="status success";
+
     }catch(e){
         if(e.name!=="AbortError"){
-            $("folderStatus").textContent="Could not select folder. Try again.";
+            $("folderStatus").textContent=
+                "Could not select folder. Try again.";
             $("folderStatus").className="status error";
         }
     }
