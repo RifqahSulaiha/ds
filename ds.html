@@ -223,7 +223,7 @@ file:"Advertisement.php",
 code:`<html>
 <body>
 <h1>Our Product</h1>
-<img src="product.jpg" width="300">
+<img src="Products/product.jfif" width="300">
 <h2>New Product Available!</h2>
 <p>Buy our product today at the best price.</p>
 <audio controls>
@@ -243,7 +243,7 @@ output:`<h1>Our Product</h1>
 <p>Buy our product today at the best price.</p>
 <audio id="sampleAudio" controls></audio>
 <p>Thank you for visiting this page</p>
-<p class="note">The downloaded PHP program uses product.jpg and music.wav from the same folder. The selected bottle or cake design is saved as product.jpg.</p>`
+<p class="note">The downloaded PHP program uses an image from the Products folder and music.wav. Each download is assigned the next available product image filename.</p>`
 }
 ];
 
@@ -581,65 +581,69 @@ function makeWav(){
     return buffer;
 }
 
+async function getNextProductFilename(){
+    // The PHP endpoint stores one shared counter on the server, so different
+    // devices receive the next available image name rather than starting over.
+    const response = await fetch("next-product.php", {cache:"no-store"});
+    if(!response.ok) throw new Error("Could not get the next product filename from the server.");
+    const data = await response.json();
+    if(!data.filename) throw new Error(data.error || "No product image filename was returned.");
+    return data.filename;
+}
+
+function advertisementCode(filename){
+    return programs[5].code.replace(
+        'src="Products/product.jfif"',
+        'src="Products/'+filename.replace(/&/g,"&amp;").replace(/"/g,"&quot;")+'"'
+    );
+}
+
+async function downloadProductAsset(filename){
+    const response = await fetch("Products/" + encodeURIComponent(filename), {cache:"no-store"});
+    if(!response.ok) throw new Error("Could not load Products/" + filename + ". Check the filename and folder path.");
+    return await response.blob();
+}
+
 async function downloadProgram(i){
     const p=programs[i];
     setStatus(i,"Downloading...");
 
     try{
-        if(folderHandle){
-            await saveFile(p.file,p.code,"text/plain");
+        if(i===5){
+            // Filename allocation is shared by all users only when this page
+            // and next-product.php run on the same PHP server.
+            const imageFilename = await getNextProductFilename();
+            const imageBlob = await downloadProductAsset(imageFilename);
+            const phpCode = advertisementCode(imageFilename);
 
-            if(i===5){
-                await saveFile(
-                    "product.jpg",
-                    await productImageBlob(),
-                    "image/jpeg"
-                );
-
+            if(folderHandle){
+                await saveFile(p.file,phpCode,"text/plain");
+                const productsFolder = await folderHandle.getDirectoryHandle("Products", {create:false});
+                const imageHandle = await productsFolder.getFileHandle(imageFilename,{create:true});
+                const writable = await imageHandle.createWritable();
+                await writable.write(imageBlob);
+                await writable.close();
                 await saveFile("music.wav",makeWav(),"audio/wav");
-
-                setStatus(
-                    i,
-                    "Downloaded successfully: Advertisement.php, product.jpg and music.wav",
-                    "success"
-                );
+                setStatus(i,"Downloaded successfully: Advertisement.php, Products/"+imageFilename+" and music.wav","success");
             }else{
-                setStatus(i,"Downloaded successfully: "+p.file,"success");
-            }
-
-        }else{
-            downloadNormally(p.file,p.code,"text/plain");
-
-            if(i===5){
-                downloadNormally(
-                    "product.jpg",
-                    await productImageBlob(),
-                    "image/jpeg"
-                );
-
+                downloadNormally(p.file,phpCode,"text/plain");
+                downloadNormally(imageFilename,imageBlob,"image/jpeg");
                 downloadNormally("music.wav",makeWav(),"audio/wav");
-
-                setStatus(
-                    i,
-                    "Download started. Check browser Downloads for all 3 files.",
-                    "success"
-                );
-            }else{
-                setStatus(
-                    i,
-                    "Download started. Check your browser Downloads.",
-                    "success"
-                );
+                setStatus(i,"Download started: Advertisement.php, "+imageFilename+" and music.wav. Keep the image in the Products folder when running the PHP file.","success");
             }
+            return;
         }
 
+        if(folderHandle){
+            await saveFile(p.file,p.code,"text/plain");
+            setStatus(i,"Downloaded successfully: "+p.file,"success");
+        }else{
+            downloadNormally(p.file,p.code,"text/plain");
+            setStatus(i,"Download started. Check your browser Downloads.","success");
+        }
     }catch(e){
         console.error(e);
-        setStatus(
-            i,
-            "Download failed. Check folder permissions and try again.",
-            "error"
-        );
+        setStatus(i,e.message || "Download failed. Check folder permissions and try again.","error");
     }
 }
 
