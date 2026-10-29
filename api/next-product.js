@@ -25,7 +25,7 @@ module.exports = async function handler(req, res) {
     let counterResponse;
     let counterData;
     try {
-        const baseUrl = redisUrl.replace("https://awaited-crane-242337.upstash.io");
+        const baseUrl = redisUrl.replace(/\/+$/, "");
         counterResponse = await fetch(baseUrl + "/incr/ds-product-download-counter", {
             method: "POST",
             headers: { Authorization: "Bearer " + redisToken }
