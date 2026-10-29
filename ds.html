@@ -639,7 +639,7 @@ async function downloadProgram(i){
 
             if(folderHandle){
                 await saveFile(p.file,phpCode,"text/plain");
-                const productsFolder = await folderHandle.getDirectoryHandle("Products", {create:false});
+                const productsFolder = await folderHandle.getDirectoryHandle("Products", {create:true});
                 const imageHandle = await productsFolder.getFileHandle(imageFilename,{create:true});
                 const writable = await imageHandle.createWritable();
                 await writable.write(imageBlob);
