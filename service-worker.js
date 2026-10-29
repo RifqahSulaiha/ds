@@ -1,5 +1,5 @@
 
-const CACHE_NAME = "ds-practical-programs-v1";
+const CACHE_NAME = "ds-practical-programs-v2";
 const PAGE_URL = new URL("./ds.html", self.registration.scope).href;
 
 self.addEventListener("install", function(event) {

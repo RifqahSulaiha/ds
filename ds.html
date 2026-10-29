@@ -585,8 +585,19 @@ async function getNextProductFilename(){
     const response = await fetch("/api/next-product", {cache:"no-store"});
     const contentType = response.headers.get("content-type") || "";
     const isJson = contentType.toLowerCase().includes("application/json");
-    if(!response.ok && !isJson){
-        throw new Error("The product API returned an unexpected response (HTTP "+response.status+"). Check the Vercel API deployment.");
+    if(!response.ok){
+        let message = "The product API request failed (HTTP "+response.status+"). Check the Vercel API deployment.";
+        if(isJson){
+            try{
+                const errorData = await response.json();
+                if(errorData && errorData.error) message = errorData.error;
+            }catch{
+                message = "The product API returned an error with invalid JSON (HTTP "+response.status+").";
+            }
+        }else{
+            message = "The product API returned a non-JSON error (HTTP "+response.status+"). Check that /api/next-product is deployed on Vercel.";
+        }
+        throw new Error(message);
     }
     if(!isJson){
         throw new Error("The product API returned a non-JSON response. Check that /api/next-product is deployed on Vercel.");
@@ -597,7 +608,6 @@ async function getNextProductFilename(){
     }catch{
         throw new Error("The product API returned invalid JSON. Check the Vercel API deployment.");
     }
-    if(!response.ok) throw new Error(data.error || "The product API request failed (HTTP "+response.status+").");
     if(!data || typeof data.filename !== "string" || !data.filename){
         throw new Error((data && data.error) || "No product image filename was returned.");
     }
