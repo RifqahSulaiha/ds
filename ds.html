@@ -2,403 +2,436 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PHP Practical Programs</title>
 
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#0b0d12;color:#edf1f7;font:15px/1.6 Arial,sans-serif}
-.layout{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
-aside{background:#10141d;padding:24px;border-right:1px solid #293244}
-main{padding:30px;max-width:1100px;width:100%}
-h1{margin-top:8px;font-size:34px}
-h2{font-size:20px}
-p,.muted{color:#aab5c6}
-button{background:#8b5cf6;color:white;border:0;padding:10px 14px;
-border-radius:7px;cursor:pointer;font-weight:bold;margin:4px 4px 4px 0}
+body{margin:0;background:#0b0d12;color:#edf1f7;font:15px/1.7 Arial,sans-serif}
+header{padding:25px 6%;background:#111621;border-bottom:1px solid #293244}
+header h1{margin:0;color:#c4b5fd}
+header p{color:#aab5c6}
+main{max-width:1050px;margin:auto;padding:25px}
+.toolbar{padding:18px 0;border-bottom:1px solid #293244}
+button{padding:10px 14px;margin:4px 5px 4px 0;border:0;border-radius:6px;
+background:#8b5cf6;color:white;font-weight:bold;cursor:pointer}
 button.secondary{background:#202736;border:1px solid #394357}
-input[type=search]{width:100%;padding:10px;background:#191f2b;
-color:white;border:1px solid #394357;border-radius:7px;margin:15px 0}
-.nav button{display:block;width:100%;text-align:left;background:transparent;color:#cbd5e1}
-.practical{padding:22px 5px;border-bottom:1px solid #293244}
-pre{white-space:pre;overflow:auto;max-height:320px;background:#07090e;
-border:1px solid #293244;padding:14px;border-radius:7px;color:#dbeafe}
-summary{cursor:pointer;color:#c4b5fd;font-weight:bold}
-.notice{background:#211b12;border:1px solid #70572c;padding:14px;border-radius:8px}
-#status{color:#36d399;font-size:13px}
-@media(max-width:700px){.layout{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid #293244}main{padding:18px}}
+button:hover{opacity:.85}
+.status{display:block;margin:8px 0;color:#aab5c6;font-size:13px}
+.status.success{color:#34d399}
+.status.error{color:#fb7185}
+.status.loading{color:#fbbf24}
+.practical{padding:25px 0;border-bottom:1px solid #293244}
+h2{font-size:22px;color:#c4b5fd}
+h3{font-size:16px;color:#e2e8f0;margin-bottom:5px}
+pre{padding:16px;background:#07090e;border:1px solid #293244;
+border-radius:8px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;
+color:#dbeafe;font-size:13px}
+details{margin-top:15px}
+summary{cursor:pointer;color:#c4b5fd;font-weight:bold;padding:8px 0}
+.output{padding:18px;background:#fff;color:#111;border-radius:7px;margin-top:8px}
+.output input{margin:5px 0;padding:6px;max-width:100%}
+.output button{background:#2563eb}
+.output img{max-width:300px;width:100%}
+.output audio{max-width:100%}
+.output .result{margin-top:12px;color:#111}
+.note{color:#aab5c6;font-size:13px}
+@media(max-width:600px){main{padding:15px}header{padding:20px}}
 </style>
 </head>
 <body>
-<div class="layout">
-<aside>
-<h2>PHP Practicals</h2>
-<p class="muted">Programs · Source Code · Downloads</p>
-<input id="search" type="search" placeholder="Search practicals...">
-<div class="nav" id="nav"></div>
-</aside>
+
+<header>
+<h1>PHP Practical Programs</h1>
+<p>Source Code · Sample Output · Individual Downloads</p>
+</header>
 
 <main>
-<p style="color:#c4b5fd">PRACTICAL LAB · PHP</p>
-<h1>PHP Practical Programs</h1>
-<p class="muted">Copy the source code or download each PHP practical separately.</p>
-
-<div class="notice">
-<strong>Save directly to XAMPP:</strong>
-<p>Select your actual <code>C:\xampp\htdocs</code> folder once. Keep this page open while downloading. This feature works in supported versions of Chrome and Edge.</p>
-<button id="choose">Choose htdocs Folder Once</button>
-<span id="status">No folder selected</span>
+<div class="toolbar">
+<button id="chooseFolder">Choose htdocs Folder Once</button>
+<span id="folderStatus" class="status">No folder selected.</span>
+<p class="note">Select your XAMPP htdocs folder once. Keep this page open while downloading.</p>
 </div>
 
 <div id="programs"></div>
-<p class="muted">Start Apache in XAMPP before running PHP files through localhost.</p>
 </main>
-</div>
 
 <script>
-const items = [
+const programs = [
 {
-title:"Greeting Program",
+title:"1. Greeting",
+aim:"To write a php program to Get the name of the user from a form and show “greeting text”.",
 file:"Greeting.php",
 code:`<!DOCTYPE html>
 <html>
 <body>
 <form method="post">
-<label>Enter your name:
-<input type="text" name="name" required>
-</label>
-<button type="submit">Submit</button>
+    Enter your name:
+    <input type="text" name="name">
+    <input type="submit" value="Submit">
 </form>
-
 <?php
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $name = htmlspecialchars($_POST["name"], ENT_QUOTES, "UTF-8");
+if (isset($_POST['name'])) {
+    $name = $_POST['name'];
     echo "Hello, $name! Welcome!";
 }
 ?>
 </body>
-</html>`
+</html>`,
+output:`<form onsubmit="event.preventDefault();this.nextElementSibling.textContent='Hello, '+this.elements.name.value+'! Welcome!'">
+Enter your name:
+<input type="text" name="name" placeholder="Enter your name">
+<input type="submit" value="Submit">
+</form><div class="result"></div>`
 },
 {
-title:"Palindrome Checker",
+title:"2. Palindrome",
+aim:"To Write a PHP program to check whether the given string is a palindrome or not.",
 file:"Palindrome.php",
 code:`<!DOCTYPE html>
 <html>
 <body>
 <form method="post">
-<label>Enter a word:
-<input type="text" name="word" required>
-</label>
-<button type="submit">Check</button>
+    Enter a string:
+    <input type="text" name="str">
+    <input type="submit" value="Check">
 </form>
-
 <?php
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $word = trim($_POST["word"]);
-    $clean = strtolower(
-        preg_replace("/[^a-z0-9]/i", "", $word)
-    );
-
-    if ($clean !== "" && $clean === strrev($clean)) {
-        echo htmlspecialchars($word) . " is a palindrome.";
+if (isset($_POST['str'])) {
+    $str = $_POST['str'];
+    $reverse = strrev($str);
+    if ($str == $reverse) {
+        echo "The ".$str." is a Palindrome";
     } else {
-        echo htmlspecialchars($word) . " is not a palindrome.";
+        echo "The ".$str." string is not a Palindrome";
     }
 }
 ?>
 </body>
-</html>`
+</html>`,
+output:`<form onsubmit="event.preventDefault();let s=this.elements.str.value;this.nextElementSibling.textContent=s===s.split('').reverse().join('')?'The '+s+' is a Palindrome':'The '+s+' string is not a Palindrome'">
+Enter a string:
+<input type="text" name="str" placeholder="Example: madam">
+<input type="submit" value="Check">
+</form><div class="result"></div>`
 },
 {
-title:"Program Using Function",
+title:"3. Program using function",
+aim:"To Write a PHP program using function.",
 file:"Function.php",
-code:`<!DOCTYPE html>
-<html>
+code:`<html>
 <body>
 <form method="post">
-<label>Enter your name:
-<input type="text" name="name" required>
-</label>
-<button type="submit">Greet</button>
+    Enter your name:
+    <input type="text" name="name">
+    <input type="submit" value="Submit">
 </form>
-
 <?php
-function greet($name) {
-    $name = htmlspecialchars($name, ENT_QUOTES, "UTF-8");
-    echo "Hello, " . $name . "!";
+function greet($name)
+{
+    echo "Hello, " . $name;
 }
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    greet($_POST["name"]);
+if (isset($_POST['name'])) {
+    greet($_POST['name']);
 }
 ?>
 </body>
-</html>`
+</html>`,
+output:`<form onsubmit="event.preventDefault();this.nextElementSibling.textContent='Hello, '+this.elements.name.value">
+Enter your name:
+<input type="text" name="name" placeholder="Enter your name">
+<input type="submit" value="Submit">
+</form><div class="result"></div>`
 },
 {
-title:"Array Manipulation",
+title:"4. Array Manipulation",
+aim:"Write a PHP program for array manipulation.",
 file:"ArrayManipulation.php",
-code:`<!DOCTYPE html>
-<html>
-<body>
-<?php
+code:`<?php
 $fruits = array("Apple", "Mango", "Orange");
-
-echo "<h2>Fruit List</h2>";
-echo "<ul>";
-
+echo "Fruits:<br>";
 foreach ($fruits as $fruit) {
-    echo "<li>" . htmlspecialchars($fruit) . "</li>";
+    echo $fruit . "<br>";
 }
-
-echo "</ul>";
-?>
-</body>
-</html>`
+?>`,
+output:`<div>Fruits:<br>Apple<br>Mango<br>Orange</div>`
 },
 {
-title:"Personal Information Form",
+title:"5. Personal Information",
+aim:"Write a PHP program to design Personal Information.",
 file:"PersonalInformation.php",
 code:`<!DOCTYPE html>
 <html>
 <body>
+<h2>Personal Information</h2>
 <form method="post">
-<label>Name:
-<input type="text" name="name" required>
-</label><br><br>
-
-<label>Age:
-<input type="number" name="age" min="1" required>
-</label><br><br>
-
-<label>Email:
-<input type="email" name="email" required>
-</label><br><br>
-
-<button type="submit">Submit</button>
+    Name:
+    <input type="text" name="name"><br><br>
+    Age:
+    <input type="number" name="age"><br><br>
+    Email:
+    <input type="email" name="email"><br><br>
+    <input type="submit" value="Submit">
 </form>
-
 <?php
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $name = htmlspecialchars($_POST["name"], ENT_QUOTES, "UTF-8");
-    $age = (int) $_POST["age"];
-    $email = htmlspecialchars($_POST["email"], ENT_QUOTES, "UTF-8");
-
-    echo "<h2>Personal Information</h2>";
-    echo "Name: $name<br>";
-    echo "Age: $age<br>";
-    echo "Email: $email";
+if (isset($_POST['name'])) {
+    echo "<h3>Personal Information</h3>";
+    echo "Name: " . $_POST['name'] . "<br>";
+    echo "Age: " . $_POST['age'] . "<br>";
+    echo "Email: " . $_POST['email'];
 }
 ?>
 </body>
-</html>`
+</html>`,
+output:`<h3>Personal Information</h3>
+<form onsubmit="event.preventDefault();let f=this;let r=this.nextElementSibling;r.innerHTML='<h3>Personal Information</h3>Name: '+esc(f.elements.name.value)+'<br>Age: '+esc(f.elements.age.value)+'<br>Email: '+esc(f.elements.email.value)">
+Name:
+<input type="text" name="name"><br><br>
+Age:
+<input type="number" name="age"><br><br>
+Email:
+<input type="email" name="email"><br><br>
+<input type="submit" value="Submit">
+</form><div class="result"></div>`
 },
 {
-title:"Advertisement",
+title:"6. Advertisement",
+aim:"Create a web page to advertise product of the company using images and audio.",
 file:"Advertisement.php",
-code:`<!DOCTYPE html>
-<html>
-<head>
-<title>Product Advertisement</title>
-</head>
+code:`<html>
 <body>
-<h1>Discover Our Amazing Product!</h1>
-
-<img src="product.jpg" alt="Product image" width="300">
-
-<p>Quality you can trust. Great value for everyone!</p>
-
+<h1>Our Product</h1>
+<img src="product.jpg" width="300">
+<h2>New Product Available!</h2>
+<p>Buy our product today at the best price.</p>
 <audio controls>
-    <source src="music.mp3" type="audio/mpeg">
-    Your browser does not support audio.
+    <source src="music.wav" type="audio/wav">
 </audio>
-
 <?php
-echo "<p>Thank you for visiting our advertisement!</p>";
+echo "Thank you for visiting this page";
 ?>
 </body>
-</html>`
+</html>`,
+output:`<h1>Our Product</h1>
+<img id="sampleProduct" alt="Product image" width="300">
+<h2>New Product Available!</h2>
+<p>Buy our product today at the best price.</p>
+<audio id="sampleAudio" controls></audio>
+<p>Thank you for visiting this page</p>
+<p class="note">The downloaded PHP program uses product.jpg and music.wav from the same folder.</p>`
 }
 ];
 
-let directory = null;
+let folderHandle = null;
 const $ = id => document.getElementById(id);
 
-function escapeHTML(text){
-    return text.replace(/[&<>"']/g, c => ({
-        "&":"&amp;","<":"&lt;",">":"&gt;",
-        '"':"&quot;","'":"&#39;"
+function esc(s){
+    return String(s).replace(/[&<>"']/g,c=>({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
     }[c]));
 }
 
-function render(filter=""){
-    const found = items.filter(p =>
-        (p.title + p.file).toLowerCase().includes(filter.toLowerCase())
-    );
+function render(){
+    $("programs").innerHTML = programs.map((p,i)=>`
+    <section class="practical" id="program${i}">
+      <h2>${p.title}</h2>
+      <h3>AIM:</h3>
+      <p>${p.aim}</p>
 
-    $("nav").innerHTML = found.map((p,i) =>
-        `<button onclick="document.getElementById('p${items.indexOf(p)}').scrollIntoView({behavior:'smooth'})">${p.title}</button>`
-    ).join("");
+      <button class="secondary" onclick="copyCode(${i})">Copy Code</button>
+      <button onclick="downloadProgram(${i})">Download ${p.file}</button>
+      <span id="status${i}" class="status" aria-live="polite">Ready to download.</span>
 
-    $("programs").innerHTML = found.map(p => {
-        const i = items.indexOf(p);
-        return `
-        <section class="practical" id="p${i}">
-          <h2>${i+1}. ${p.title}</h2>
-          <p class="muted">${p.file}</p>
-          <button class="secondary" onclick="copyCode(${i})">Copy Code</button>
-          <button onclick="downloadProgram(${i})">Download ${p.file}</button>
-          <details>
-            <summary>View Source Code</summary>
-            <pre>${escapeHTML(p.code)}</pre>
-          </details>
-        </section>`;
-    }).join("");
+      <details>
+        <summary>View Source Code</summary>
+        <h3>Program:</h3>
+        <pre>${esc(p.code)}</pre>
+      </details>
+
+      <details>
+        <summary>View Sample Output</summary>
+        <h3>Output:</h3>
+        <div class="output" id="output${i}">${p.output}</div>
+      </details>
+    </section>`).join("");
+
+    setupAdvertisementSample();
 }
 
-async function copyCode(i){
-    try{
-        await navigator.clipboard.writeText(items[i].code);
-        alert("Code copied!");
-    }catch(e){
-        alert("Clipboard unavailable. Open this page in Chrome or Edge.");
+function setupAdvertisementSample(){
+    const canvas=document.createElement("canvas");
+    canvas.width=600;canvas.height=400;
+    const c=canvas.getContext("2d");
+    const g=c.createLinearGradient(0,0,600,400);
+    g.addColorStop(0,"#312e81");
+    g.addColorStop(1,"#a855f7");
+    c.fillStyle=g;c.fillRect(0,0,600,400);
+    c.fillStyle="#fff";c.font="bold 48px Arial";
+    c.fillText("OUR PRODUCT",105,180);
+    c.font="25px Arial";c.fillText("New Product Available!",105,235);
+
+    $("sampleProduct").src=canvas.toDataURL("image/jpeg");
+
+    const audio=document.getElementById("sampleAudio");
+    if(audio){
+        const wav=makeWav();
+        audio.src=URL.createObjectURL(new Blob([wav],{type:"audio/wav"}));
     }
 }
 
-async function writeFile(folder, filename, content, type="text/plain"){
-    const handle = await folder.getFileHandle(filename,{create:true});
-    const writable = await handle.createWritable();
+async function copyCode(i){
+    const status=$("status"+i);
+    try{
+        await navigator.clipboard.writeText(programs[i].code);
+        status.className="status success";
+        status.textContent="Code copied successfully!";
+    }catch(e){
+        status.className="status error";
+        status.textContent="Copy failed. Try opening this page in Chrome or Edge.";
+    }
+}
+
+function setStatus(i,message,type="loading"){
+    const s=$("status"+i);
+    s.className="status "+type;
+    s.textContent=message;
+}
+
+function downloadNormally(filename,content,type="text/plain"){
+    const url=URL.createObjectURL(new Blob([content],{type}));
+    const a=document.createElement("a");
+    a.href=url;a.download=filename;
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),2000);
+}
+
+async function saveFile(filename,content,type="text/plain"){
+    const handle=await folderHandle.getFileHandle(filename,{create:true});
+    const writable=await handle.createWritable();
     await writable.write(new Blob([content],{type}));
     await writable.close();
 }
 
-function normalDownload(filename, content, type="text/plain"){
-    const blob = new Blob([content],{type});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    a.click();
-    setTimeout(()=>URL.revokeObjectURL(url),1500);
+function makeWav(){
+    const rate=8000, samples=rate;
+    const buffer=new ArrayBuffer(44+samples);
+    const v=new DataView(buffer);
+
+    function str(offset,s){
+        for(let i=0;i<s.length;i++)v.setUint8(offset+i,s.charCodeAt(i));
+    }
+
+    str(0,"RIFF");v.setUint32(4,36+samples,true);
+    str(8,"WAVE");str(12,"fmt ");
+    v.setUint32(16,16,true);v.setUint16(20,1,true);
+    v.setUint16(22,1,true);v.setUint32(24,rate,true);
+    v.setUint32(28,rate,true);v.setUint16(32,1,true);
+    v.setUint16(34,8,true);str(36,"data");
+    v.setUint32(40,samples,true);
+
+    for(let i=0;i<samples;i++){
+        v.setUint8(44+i,128+Math.round(
+            25*Math.sin(2*Math.PI*440*i/rate)
+        ));
+    }
+    return buffer;
 }
 
-$("choose").addEventListener("click", async()=>{
-    if(!window.showDirectoryPicker){
-        alert("Use a supported version of Chrome or Edge to select a folder. You can still download files normally.");
-        return;
-    }
-
-    try{
-        const folder = await window.showDirectoryPicker({mode:"readwrite"});
-
-        if(folder.name.toLowerCase() !== "htdocs"){
-            alert("Please select the actual C:\\xampp\\htdocs folder.");
-            return;
-        }
-
-        if(!confirm("Confirm this is C:\\xampp\\htdocs. Downloads will be saved in the selected folder.")){
-            return;
-        }
-
-        directory = folder;
-        $("status").textContent = " — htdocs selected";
-        alert("Folder selected! Keep this page open while downloading.");
-    }catch(e){
-        if(e.name !== "AbortError") alert("Could not select the folder.");
-    }
-});
-
 async function downloadProgram(i){
-    const p = items[i];
+    const p=programs[i];
+    setStatus(i,"Downloading...");
 
     try{
-        if(directory){
-            await writeFile(directory,p.file,p.code,"text/plain");
+        if(folderHandle){
+            await saveFile(p.file,p.code,"text/plain");
 
-            if(p.title === "Advertisement"){
-                /*
-                  This generates a sample product image.
-                  The image is saved as a JPEG file.
-                */
-                const canvas = document.createElement("canvas");
-                canvas.width = 600;
-                canvas.height = 400;
-                const ctx = canvas.getContext("2d");
+            if(i===5){
+                const canvas=document.createElement("canvas");
+                canvas.width=600;canvas.height=400;
+                const c=canvas.getContext("2d");
+                const g=c.createLinearGradient(0,0,600,400);
+                g.addColorStop(0,"#312e81");
+                g.addColorStop(1,"#a855f7");
+                c.fillStyle=g;c.fillRect(0,0,600,400);
+                c.fillStyle="#fff";c.font="bold 48px Arial";
+                c.fillText("OUR PRODUCT",105,180);
+                c.font="25px Arial";c.fillText("New Product Available!",105,235);
 
-                const gradient = ctx.createLinearGradient(0,0,600,400);
-                gradient.addColorStop(0,"#241447");
-                gradient.addColorStop(1,"#8b5cf6");
-                ctx.fillStyle = gradient;
-                ctx.fillRect(0,0,600,400);
-                ctx.fillStyle = "#ffffff";
-                ctx.font = "bold 38px Arial";
-                ctx.fillText("OUR PRODUCT",150,180);
-                ctx.font = "22px Arial";
-                ctx.fillText("Quality you can trust",155,225);
-
-                const imageBlob = await new Promise(resolve =>
+                const imageBlob=await new Promise(resolve=>
                     canvas.toBlob(resolve,"image/jpeg",0.9)
                 );
 
-                await writeFile(directory,"product.jpg",imageBlob,"image/jpeg");
+                await saveFile("product.jpg",imageBlob,"image/jpeg");
+                await saveFile("music.wav",makeWav(),"audio/wav");
 
-                /*
-                  Creates a short sample audio file.
-                  It is WAV audio, so it is saved with the correct
-                  .wav extension rather than falsely naming it MP3.
-                */
-                const sampleRate = 8000;
-                const seconds = 1;
-                const samples = sampleRate * seconds;
-                const buffer = new ArrayBuffer(44 + samples);
-                const view = new DataView(buffer);
-
-                function writeString(offset,str){
-                    for(let n=0;n<str.length;n++){
-                        view.setUint8(offset+n,str.charCodeAt(n));
-                    }
-                }
-
-                writeString(0,"RIFF");
-                view.setUint32(4,36+samples,true);
-                writeString(8,"WAVE");
-                writeString(12,"fmt ");
-                view.setUint32(16,16,true);
-                view.setUint16(20,1,true);
-                view.setUint16(22,1,true);
-                view.setUint32(24,sampleRate,true);
-                view.setUint32(28,sampleRate,true);
-                view.setUint16(32,1,true);
-                view.setUint16(34,8,true);
-                writeString(36,"data");
-                view.setUint32(40,samples,true);
-
-                for(let n=0;n<samples;n++){
-                    view.setUint8(44+n,128+Math.round(
-                        25*Math.sin(2*Math.PI*440*n/sampleRate)
-                    ));
-                }
-
-                await writeFile(directory,"music.wav",buffer,"audio/wav");
-                alert("Saved Advertisement.php, product.jpg and music.wav to htdocs.");
+                setStatus(i,"Downloaded successfully: Advertisement.php, product.jpg and music.wav","success");
             }else{
-                alert(p.file+" saved to htdocs.");
+                setStatus(i,"Downloaded successfully: "+p.file,"success");
             }
         }else{
-            normalDownload(p.file,p.code,"text/plain");
-            alert("Downloaded "+p.file+". Move it into C:\\xampp\\htdocs.");
+            downloadNormally(p.file,p.code,"text/plain");
 
-            if(p.title === "Advertisement"){
-                alert("The advertisement also needs product.jpg and music.mp3. Select htdocs first to generate its sample assets automatically.");
+            if(i===5){
+                const canvas=document.createElement("canvas");
+                canvas.width=600;canvas.height=400;
+                const c=canvas.getContext("2d");
+                const g=c.createLinearGradient(0,0,600,400);
+                g.addColorStop(0,"#312e81");
+                g.addColorStop(1,"#a855f7");
+                c.fillStyle=g;c.fillRect(0,0,600,400);
+                c.fillStyle="#fff";c.font="bold 48px Arial";
+                c.fillText("OUR PRODUCT",105,180);
+                c.font="25px Arial";c.fillText("New Product Available!",105,235);
+
+                const imageBlob=await new Promise(resolve=>
+                    canvas.toBlob(resolve,"image/jpeg",0.9)
+                );
+
+                downloadNormally("product.jpg",imageBlob,"image/jpeg");
+                downloadNormally("music.wav",makeWav(),"audio/wav");
+
+                setStatus(i,"Download started. Check browser Downloads for all 3 files.","success");
+            }else{
+                setStatus(i,"Download started. Check your browser Downloads.","success");
             }
         }
     }catch(e){
         console.error(e);
-        alert("Could not save the file. Check folder permissions and select htdocs again.");
+        setStatus(i,"Download failed. Check folder permissions and try again.","error");
     }
 }
 
-$("search").addEventListener("input",e=>render(e.target.value));
+$("chooseFolder").addEventListener("click",async()=>{
+    if(!window.showDirectoryPicker){
+        $("folderStatus").textContent="Folder picker unavailable. Downloads will use your browser's Downloads folder.";
+        $("folderStatus").className="status error";
+        return;
+    }
+
+    try{
+        const selected=await window.showDirectoryPicker({mode:"readwrite"});
+
+        if(selected.name.toLowerCase()!=="htdocs"){
+            $("folderStatus").textContent="Please select the actual htdocs folder.";
+            $("folderStatus").className="status error";
+            return;
+        }
+
+        if(!confirm("Confirm that the selected folder is C:\\xampp\\htdocs.")){
+            return;
+        }
+
+        folderHandle=selected;
+        $("folderStatus").textContent="htdocs folder selected. Ready to download.";
+        $("folderStatus").className="status success";
+    }catch(e){
+        if(e.name!=="AbortError"){
+            $("folderStatus").textContent="Could not select folder. Try again.";
+            $("folderStatus").className="status error";
+        }
+    }
+});
+
 render();
 </script>
 </body>
